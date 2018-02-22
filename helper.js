@@ -42,9 +42,10 @@ exports.trailingStopLoss = function() {
     destroy: resetSettings,
     update: calculateStopLoss,
     log : printVariables,
-    isTriggered : isTriggered,
+    isTriggered : isTriggered
   }
 };
+
 /**
  * We use this module to keep track of candle history.
  */
