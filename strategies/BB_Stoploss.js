@@ -5,7 +5,7 @@
  */
 // helpers
 
-const helper = require('../helper.js');
+const helper = require('../core/helper.js');
 var _ = require('lodash');
 var log = require('../core/log.js');
 var BB = require('./indicators/BB.js');
