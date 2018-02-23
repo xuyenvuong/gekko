@@ -57,59 +57,59 @@ method.log = function(candle) {
 
 method.check = function(candle) {
   var BB = this.indicators.bb;
-  var price = candle.close;
+  const price = candle.close;
   this.nsamples++;
 
-  const currentPrice = candle.close;
-
-  if(this.stopLoss.isTriggered(currentPrice)) {
+  if (this.stopLoss.isTriggered(price)) {
     this.advice('short');
     this.stopLoss.destroy();
   }
 
   // price Zone detection
   var zone = 'none';
+
   if (price >= BB.upper) zone = 'top';
   if ((price < BB.upper) && (price >= BB.middle)) zone = 'high';
   if ((price > BB.lower) && (price < BB.middle)) zone = 'low';
   if (price <= BB.lower) zone = 'bottom';
-  log.debug('current zone:  ',zone);
 
+  log.debug('current zone:  ', zone);
 
   if (this.trend.zone == zone) {
     // Ain't no zone change
     log.debug('persisted');
     this.trend = {
       zone: zone,  // none, top, high, low, bottom
-      duration: this.trend.duration+1,
+      duration: this.trend.duration + 1,
       persisted: true
-    }
+    };
 
-    this.stopLoss.update(currentPrice);
+    this.stopLoss.update(price);
     this.advice();
-  }
-  else {
+  } else {
     // There is a zone change
-    log.debug('Leaving zone: ',this.trend.zone)
+    log.debug('Leaving zone: ', this.trend.zone)
 
     switch (this.trend.zone) {
       case 'top':
         this.advice('short');
         this.stopLoss.destroy();
-        log.debug(   '>>>>>   SIGNALING ADVICE SHORT   <<<<<<<<<<<<');
+        log.debug('>>>>>   SIGNALING ADVICE SHORT   <<<<<<<<<<<<');
         break;
       case 'bottom':
-        this.stopLoss.create(this.stopLoss.percentage, currentPrice);
+        this.stopLoss.create(this.stopLoss.percentage, price);
         this.advice('long');
         log.debug('>>>>>   SIGNALING ADVICE LONG    <<<<<<<<<<<<');
         break;
       case 'high':
+        this.stopLoss.update(price);
+        this.advice();
+        break;
       case 'low':
-        this.stopLoss.update(currentPrice);
         this.advice();
         break;
       default:
-        log.debug('>>>>>   UNKNOWN ZONE: '+ this.trend.zone +'    <<<<<<<<<<<<');
+        log.debug('>>>>>   UNKNOWN ZONE: ' + this.trend.zone + '    <<<<<<<<<<<<');
         break;
     }
 
