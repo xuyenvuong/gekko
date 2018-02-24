@@ -1,0 +1,7 @@
+[trending]
+TimePeriod = 20
+NbDevUp = 2.25
+NbDevDn = 2
+
+[trailingStop]
+percentage = 1

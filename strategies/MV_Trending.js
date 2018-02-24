@@ -1,71 +1,54 @@
 /*
 
- BB strategy - okibcn 2018-01-03
+ Trending strategy - maxvuong 2018-02-23
 
  */
-// helpers
 
-const helper = require('../core/helper.js');
+//const helper = require('../core/helper.js');
 var _ = require('lodash');
 var log = require('../core/log.js');
-var BB = require('./indicators/BB.js');
+var TRENDING = require('./indicators/TRENDING.js');
 
 // let's create our own method
 var method = {};
 
 // prepare everything our method needs
 method.init = function() {
-  this.name = 'BB_Stoploss';
-  this.nsamples = 0;
-  this.trend = {
-    zone: 'none',  // none, top, high, low, bottom
-    duration: 0,
-    persisted: false
-  };
+  this.name = 'MV_Trending';
 
-  this.stopLoss = helper.trailingStopLoss();
-  this.stopLoss.percentage = this.settings.trailingStop.percentage;
-
-  this.requiredHistory = this.tradingAdvisor.historySize;
+  //this.requiredHistory = this.tradingAdvisor.historySize;
 
   // define the indicators we need
-  this.addIndicator('bb', 'BB', this.settings.bbands);
+  this.addIndicator('trending', 'TRENDING', this.settings.trending);
 }
 
 
 // for debugging purposes log the last
 // calculated parameters.
 method.log = function(candle) {
-  var digits = 8;
-  var BB = this.indicators.bb;
-  //BB.lower; BB.upper; BB.middle are your line values
-
-  log.debug('______________________________________');
-  log.debug('calculated BB properties for candle ',this.nsamples);
-
-  if (BB.upper > candle.close)  log.debug('\t', 'Upper BB:', BB.upper.toFixed(digits));
-  if (BB.middle > candle.close) log.debug('\t', 'Mid   BB:', BB.middle.toFixed(digits));
-  if (BB.lower >= candle.close) log.debug('\t', 'Lower BB:', BB.lower.toFixed(digits));
-
-  log.debug('\t', 'price:', candle.close.toFixed(digits));
-
-  if (BB.upper <= candle.close)  log.debug('\t', 'Upper BB:', BB.upper.toFixed(digits));
-  if (BB.middle <= candle.close) log.debug('\t', 'Mid   BB:', BB.middle.toFixed(digits));
-  if (BB.lower < candle.close)   log.debug('\t', 'Lower BB:', BB.lower.toFixed(digits));
-  log.debug('\t', 'Band gap: ', BB.upper.toFixed(digits) - BB.lower.toFixed(digits));
 }
 
 method.check = function(candle) {
-  var BB = this.indicators.bb;
+  var TRENDING = this.indicators.trending;
   const price = candle.close;
-  this.nsamples++;
 
-  if (this.stopLoss.isTriggered(price)) {
-    this.advice('short');
-    this.stopLoss.destroy();
+
+  if (TRENDING.trend == 'up') {
+    if (price >= TRENDING.stopBuy) {
+      this.advice('long');
+      log.debug('>>>>>   SIGNALING ADVICE LONG    <<<<<<<<<<<<');
+    }
+
+  } else if (TRENDING.trend == 'down') {
+    if (price <= TRENDING.stopLoss) {
+      this.advice('short');
+      log.debug('>>>>>   SIGNALING ADVICE SHORT   <<<<<<<<<<<<');
+    }
   }
 
-  this.stopLoss.updateHigherStopLoss(price);
+  /*
+
+  return;
 
   // price Zone detection
   var zone = 'none';
@@ -116,7 +99,7 @@ method.check = function(candle) {
       duration: 0,
       persisted: false
     }
-  }
+  }*/
 }
 
 module.exports = method;

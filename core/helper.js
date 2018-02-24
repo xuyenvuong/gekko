@@ -10,7 +10,7 @@ exports.trailingStopLoss = function() {
     _prevPrice = currentPrice;
     _stopLoss = calculateStopLoss(currentPrice);
     _isActive = true;
-  };
+  }
 
   function isTriggered(currentPrice) {
     if(_isActive)
@@ -19,12 +19,21 @@ exports.trailingStopLoss = function() {
 
   function calculateStopLoss(currentPrice) {
     return _percentage * currentPrice;
-  };
+  }
+
+  function updateHigherStopLoss(currentPrice) {
+    if (!_isActive || _stopLoss >= calculateStopLoss(currentPrice)) return;
+
+    _prevPrice = currentPrice;
+    _stopLoss = calculateStopLoss(currentPrice);
+
+    printVariables()
+  }
 
   function resetSettings() {
     _percentage, _prevPrice, _percentage, _stopLoss = null;
     _isActive = false;
-  };
+  }
 
   function printVariables() {
     console.log(`
@@ -35,12 +44,13 @@ exports.trailingStopLoss = function() {
         Active : ${_isActive}
         ----------------------------;
         `)
-  };
+  }
 
   return {
     create: initSettings,
     destroy: resetSettings,
     update: calculateStopLoss,
+    updateHigherStopLoss: updateHigherStopLoss,
     log : printVariables,
     isTriggered : isTriggered
   }
@@ -61,7 +71,7 @@ exports.candleHistory = function() {
     return (_candles.length <= _limit);
   };
 
-  var addCandleToarray = function(candle) {
+  var addCandleToArray = function(candle) {
     if (_canAdd())
       _candles.push(candle);
     else {
@@ -84,7 +94,7 @@ exports.candleHistory = function() {
 
   return {
     init: initialise,
-    add: addCandleToarray,
+    add: addCandleToArray,
     get: getCurrentCandles,
     full: isFull,
     size: getCurrentSize
