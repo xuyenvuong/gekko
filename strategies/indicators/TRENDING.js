@@ -17,14 +17,6 @@ var Indicator = function(TRENDINGSettings) {
   this.stopBuy = 0;
 
   this.initialized = false;
-
-  this.calcStopLoss = function() {
-    this.stopLoss = this.high - 1; // TODO:
-  }
-
-  this.calcStopBuy = function() {
-    this.stopBuy = this.low + 1; // TODO:
-  }
 }
 
 Indicator.prototype.update = function(price) {
@@ -77,4 +69,13 @@ Indicator.prototype.update = function(price) {
     }
   }
 }
+
+Indicator.prototype.calcStopLoss = function() {
+  this.stopLoss = this.high - 1; // TODO:
+}
+
+Indicator.prototype.calcStopBuy = function() {
+  this.stopBuy = this.low + 1; // TODO:
+}
+
 module.exports = Indicator;
