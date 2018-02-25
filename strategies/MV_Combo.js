@@ -31,8 +31,8 @@ method.check = function(candle) {
   var sma = this.indicators.sma;
   const price = candle.close;
 
-  log.debug('>>>>>>>>>>>>>>>>>> CANDLE: high: '+ candle.high +' close: '+ candle.close +' open: '+ candle.open +' low: '+ candle.low);
-  log.debug('sma result = '+ sma.input +' age = '+ sma.input +' sum = '+ sma.input);
+  log.debug('>>>>>>>>>>>>>>>>>> CANDLE: H: '+ candle.high +' C: '+ candle.close +' O: '+ candle.open +' L: '+ candle.low);
+  log.debug('sma result = '+ sma.result +' age = '+ sma.age +' sum = '+ sma.sum);
 }
 
 module.exports = method;
