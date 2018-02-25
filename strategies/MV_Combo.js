@@ -15,6 +15,13 @@ method.init = function() {
   this.input = 'candle';
   this.name = 'MV_Combo';
 
+  this.trend = {
+    direction: 'none',
+    duration: 0,
+    persisted: false,
+    adviced: false
+  };
+
   this.requiredHistory = this.tradingAdvisor.historySize;
 
   // define the indicators we need
@@ -33,9 +40,27 @@ method.check = function(candle) {
   var smaLong = this.indicators.smaLong;
   const price = candle.close;
 
-  log.debug('>>>>>>>>>>>>>>>>>> CANDLE: H: '+ candle.high +' C: '+ candle.close +' O: '+ candle.open +' L: '+ candle.low);
-  log.debug('smaShort result = '+ smaShort.result +' age = '+ smaShort.age +' sum = '+ smaShort.sum);
-  log.debug('smaLong  result = '+ smaLong.result +' age = '+ smaLong.age +' sum = '+ smaLong.sum);
+  if (smaShort.result > smaLong.result) {
+
+    if (this.trend.direction != 'up') {
+      this.trend.direction = 'up';
+
+      log.debug('TREND UP   >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
+      log.debug('smaShort result = ' + smaShort.result + ' age = ' + smaShort.age + ' sum = ' + smaShort.sum);
+      log.debug('smaLong  result = ' + smaLong.result + ' age = ' + smaLong.age + ' sum = ' + smaLong.sum);
+    }
+
+  } else if (smaShort.result < smaLong.result) {
+
+    if (this.trend.direction != 'down') {
+      this.trend.direction = 'down';
+
+      log.debug('TREND DOWN >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
+      log.debug('smaShort result = ' + smaShort.result + ' age = ' + smaShort.age + ' sum = ' + smaShort.sum);
+      log.debug('smaLong  result = ' + smaLong.result + ' age = ' + smaLong.age + ' sum = ' + smaLong.sum);
+    }
+  }
+
 }
 
 module.exports = method;
