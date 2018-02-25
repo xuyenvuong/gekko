@@ -63,12 +63,11 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      this.trend.adviced = true;
-
       diff = smaShort.result - smaLong.result;
 
       if (this.trend.diff > diff) {
         this.advice('short');
+        this.trend.adviced = true;
         log.debug('TREND UP   >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
         log.debug(' smaShort result = ' + smaShort.result + ' age = ' + smaShort.age + ' sum = ' + smaShort.sum);
         log.debug(' smaLong  result = ' + smaLong.result + ' age = ' + smaLong.age + ' sum = ' + smaLong.sum);
@@ -99,12 +98,12 @@ method.check = function(candle) {
     this.trend.persisted = true;
 
   if(this.trend.persisted && !this.trend.adviced) {
-    this.trend.adviced = true;
-
     diff = smaShort.result - smaLong.result;
 
     if (this.trend.diff > diff) {
       this.advice('long');
+      this.trend.adviced = true;
+
       log.debug('TREND DOWN >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
       log.debug(' smaShort result = ' + smaShort.result + ' age = ' + smaShort.age + ' sum = ' + smaShort.sum);
       log.debug(' smaLong  result = ' + smaLong.result + ' age = ' + smaLong.age + ' sum = ' + smaLong.sum);
