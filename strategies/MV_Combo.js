@@ -18,7 +18,8 @@ method.init = function() {
   this.requiredHistory = this.tradingAdvisor.historySize;
 
   // define the indicators we need
-  this.addIndicator('sma', 'SMA', this.settings.sma.windowLength);
+  this.addIndicator('smaShort', 'SMA', this.settings.sma.shortWindowLength);
+  this.addIndicator('smaLong', 'SMA', this.settings.sma.longWindowLength);
 }
 
 
@@ -28,11 +29,13 @@ method.log = function(candle) {
 }
 
 method.check = function(candle) {
-  var sma = this.indicators.sma;
+  var smaShort = this.indicators.smaShort;
+  var smaLong = this.indicators.smaLong;
   const price = candle.close;
 
   log.debug('>>>>>>>>>>>>>>>>>> CANDLE: H: '+ candle.high +' C: '+ candle.close +' O: '+ candle.open +' L: '+ candle.low);
-  log.debug('sma result = '+ sma.result +' age = '+ sma.age +' sum = '+ sma.sum);
+  log.debug('smaShort result = '+ smaShort.result +' age = '+ smaShort.age +' sum = '+ smaShort.sum);
+  log.debug('smaLong  result = '+ smaLong.result +' age = '+ smaLong.age +' sum = '+ smaLong.sum);
 }
 
 module.exports = method;

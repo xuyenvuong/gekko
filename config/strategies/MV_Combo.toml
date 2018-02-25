@@ -1,2 +1,3 @@
 [sma]
-windowLength = 15
+shortWindowLength = 15
+longWindowLength = 50
