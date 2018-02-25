@@ -64,7 +64,7 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (this.trend.diff > diff) {
+      if (this.trend.diff > diff + this.settings.thresholds.smaDiffRange) {
         this.advice('short');
         this.trend.adviced = true;
         log.debug('TREND UP   >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
@@ -99,7 +99,7 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (this.trend.diff > diff) {
+      if (this.trend.diff > diff + this.settings.thresholds.smaDiffRange) {
         this.advice('long');
         this.trend.adviced = true;
 
