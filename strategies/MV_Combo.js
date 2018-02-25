@@ -56,15 +56,14 @@ method.check = function(candle) {
     }
 
     this.trend.duration++;
+    diff = smaShort.result - smaLong.result;
 
-    log.debug('In uptrend since', this.trend.duration, 'candle(s)');
+    log.debug('In uptrend since', this.trend.duration, 'candle(s) - diff: ', diff);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      diff = smaShort.result - smaLong.result;
-
       if (this.trend.diff > diff) {
         this.advice('short');
         this.trend.adviced = true;
@@ -90,29 +89,28 @@ method.check = function(candle) {
         adviced: false
       };
     }
-  this.trend.duration++;
 
-  log.debug('In downtrend since', this.trend.duration, 'candle(s)');
-
-  if(this.trend.duration >= this.settings.thresholds.persistence)
-    this.trend.persisted = true;
-
-  if(this.trend.persisted && !this.trend.adviced) {
+    this.trend.duration++;
     diff = smaLong.result - smaShort.result;
 
-    if (this.trend.diff > diff) {
-      this.advice('long');
-      this.trend.adviced = true;
+    log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff);
 
-      log.debug('TREND DOWN >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
-      log.debug(' smaShort result = ' + smaShort.result + ' age = ' + smaShort.age + ' sum = ' + smaShort.sum);
-      log.debug(' smaLong  result = ' + smaLong.result + ' age = ' + smaLong.age + ' sum = ' + smaLong.sum);
-    } else {
-      this.trend.diff = diff;
-    }
-  } else
-    this.advice();
+    if(this.trend.duration >= this.settings.thresholds.persistence)
+      this.trend.persisted = true;
 
+    if(this.trend.persisted && !this.trend.adviced) {
+      if (this.trend.diff > diff) {
+        this.advice('long');
+        this.trend.adviced = true;
+
+        log.debug('TREND DOWN >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
+        log.debug(' smaShort result = ' + smaShort.result + ' age = ' + smaShort.age + ' sum = ' + smaShort.sum);
+        log.debug(' smaLong  result = ' + smaLong.result + ' age = ' + smaLong.age + ' sum = ' + smaLong.sum);
+      } else {
+        this.trend.diff = diff;
+      }
+    } else
+      this.advice();
   }
 }
 
