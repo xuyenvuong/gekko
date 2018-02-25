@@ -98,7 +98,7 @@ method.check = function(candle) {
     this.trend.persisted = true;
 
   if(this.trend.persisted && !this.trend.adviced) {
-    diff = smaShort.result - smaLong.result;
+    diff = smaLong.result - smaShort.result;
 
     if (this.trend.diff > diff) {
       this.advice('long');
