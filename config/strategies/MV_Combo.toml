@@ -1,3 +1,8 @@
 [sma]
 shortWindowLength = 15
 longWindowLength = 50
+
+[thresholds]
+down = -0.025
+up = 0.025
+persistence = 1
