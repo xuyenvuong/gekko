@@ -14,7 +14,15 @@ var method = {};
 
 // prepare everything our method needs
 method.init = function() {
+  this.input = 'candle';
   this.name = 'MV_Trending';
+
+  this.trend = {
+    direction: 'none',
+    duration: 0,
+    persisted: false,
+    adviced: false
+  };
 
   //this.requiredHistory = this.tradingAdvisor.historySize;
 
@@ -34,15 +42,45 @@ method.check = function(candle) {
 
 
   if (TRENDING.trend == 'up') {
-    if (price >= TRENDING.stopBuy) {
+
+    // new trend detected
+    if(this.trend.direction !== 'up') {
+      // reset the state for the new trend
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'up',
+        adviced: false
+      };
+    }
+
+    if (price >= TRENDING.stopBuy && !this.trend.adviced) {
+      this.trend.adviced = true;
       this.advice('long');
-      log.debug('>>>>>   SIGNALING ADVICE LONG    <<<<<<<<<<<<');
+      log.debug('>>>>> ADVICE LONG <<<<<<<<<<<<'+ 'Price: '+ price +' stopBuy: '+ TRENDING.stopBuy);
+    } else {
+      this.advice();
     }
 
   } else if (TRENDING.trend == 'down') {
-    if (price <= TRENDING.stopLoss) {
+
+    // new trend detected
+    if(this.trend.direction !== 'down') {
+      // reset the state for the new trend
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'down',
+        adviced: false
+      };
+    }
+
+    if (price <= TRENDING.stopLoss && !this.trend.adviced) {
+      this.trend.adviced = true;
       this.advice('short');
-      log.debug('>>>>>   SIGNALING ADVICE SHORT   <<<<<<<<<<<<');
+      log.debug('>>>>> ADVICE SHORT <<<<<<<<<<<<'+ 'Price: '+ price +' stopLoss: '+ TRENDING.stopLoss);
+    } else {
+      this.advice()
     }
   }
 

@@ -17,17 +17,17 @@ var Indicator = function(TRENDINGSettings) {
   this.stopBuy = 0;
 
   this.initialized = false;
-}
 
-Indicator.prototype.update = function(price) {
-
-  function calcStopLoss() {
+  this.calcStopLoss = function() {
     this.stopLoss = this.high - 1; // TODO:
   }
 
-  function calcStopBuy() {
+  this.calcStopBuy = function() {
     this.stopBuy = this.low + 1; // TODO:
   }
+}
+
+Indicator.prototype.update = function(price) {
 
   if (this.initialized) {
     this.newest = price;
@@ -35,22 +35,22 @@ Indicator.prototype.update = function(price) {
     if (this.trend == 'up') {
       if (this.newest > this.high) {
         this.high = this.newest;
-        calcStopLoss();
+        this.calcStopLoss();
       } else if (this.newest <= this.stopLoss) {
         this.trend = 'down';
         this.oldest = this.high;
         this.low = this.newest;
-        calcStopBuy();
+        this.calcStopBuy();
       }
     } else if (this.trend == 'down') {
       if (this.newest < this.low) {
         this.low = this.newest;
-        calcStopBuy();
+        this.calcStopBuy();
       } else if (this.newest >= this.stopBuy) {
         this.trend = 'up';
         this.oldest = this.low;
         this.high = this.newest;
-        calcStopLoss();
+        this.calcStopLoss();
       }
     }
   } else {
@@ -63,12 +63,12 @@ Indicator.prototype.update = function(price) {
         this.trend = 'up';
         this.low = this.oldest;
         this.high = this.newest;
-        calcStopLoss();
+        this.calcStopLoss();
       } else if (this.oldest > this.latest) {
         this.trend = 'down';
         this.low = this.newest;
         this.high = this.oldest;
-        calcStopBuy();
+        this.calcStopBuy();
       } else {
         return; // If equal, get another price
       }
