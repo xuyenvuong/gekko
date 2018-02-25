@@ -40,7 +40,7 @@ method.check = function(candle) {
   var smaLong = this.indicators.smaLong;
   const price = candle.close;
 
-  if (smaShort.result > smaLong.result) {
+  if (smaShort.result < smaLong.result) {
 
     if (this.trend.direction != 'up') {
       this.trend = {
@@ -67,7 +67,7 @@ method.check = function(candle) {
     } else
       this.advice();
 
-  } else if (smaShort.result < smaLong.result) {
+  } else if (smaShort.result > smaLong.result) {
 
     // new trend detected
     if(this.trend.direction !== 'down') {
