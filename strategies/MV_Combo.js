@@ -71,10 +71,10 @@ method.check = function(candle) {
       this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
-    log.debug('In uptrend since', this.trend.duration, 'candle(s) -',
+    log.debug('In uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' diff: ', diff.toFixed(d),
       ' macd ', macd.result.toFixed(d),
-      ' macd signal ', macd.signal.result,
+      ' macd signal ', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),
       ' avgGap: ', this.trend.avgGap.toFixed(d),
       ' C', price);
@@ -115,10 +115,10 @@ method.check = function(candle) {
       this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
-    log.debug('In downtrend since', this.trend.duration, 'candle(s) -',
+    log.debug('In downtrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' diff: ', diff.toFixed(d),
       ' macd ', macd.result.toFixed(d),
-      ' macd signal ', macd.signal.result,
+      ' macd signal ', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),
       ' avgGap: ', this.trend.avgGap.toFixed(d),
       ' C', price);
