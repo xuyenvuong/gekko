@@ -61,7 +61,7 @@ method.check = function(candle) {
     diff = smaShort.result - smaLong.result;
 
     if (this.trend.duration > 1) {
-      this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / this.trend.duration;
+      this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
     log.debug('In uptrend since', this.trend.duration, 'candle(s) - diff: ', diff);
@@ -101,7 +101,7 @@ method.check = function(candle) {
     diff = smaLong.result - smaShort.result;
 
     if (this.trend.duration > 1) {
-      this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / this.trend.duration;
+      this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
     log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' avgGap: ', this.trend.avgGap);
