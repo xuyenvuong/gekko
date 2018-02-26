@@ -82,7 +82,7 @@ method.check = function(candle) {
         log.debug('TREND UP   >>>>>> CANDLE: H', candle.high, ' C', candle.close, ' O', candle.open, ' L', candle.low);
         log.debug(' ema   result = ', ema.result);
         log.debug(' sma   result = ', diff, ' short = ', smaShort.result, ' long: ', smaLong.result );
-        log.debug(' macd  result = ', macd.result, ' signal = ', macd.signal);
+        log.debug(' macd  result = ', macd.result, ' signal = ', macd.signal.result);
       } else {
         this.trend.diff = diff;
       }
@@ -124,7 +124,7 @@ method.check = function(candle) {
         log.debug('TREND DOWN >>>>>> CANDLE: H', candle.high, ' C', candle.close, ' O', candle.open, ' L', candle.low);
         log.debug(' ema   result = ', ema.result);
         log.debug(' sma   result = ', diff, ' short = ', smaShort.result, ' long: ', smaLong.result );
-        log.debug(' macd  result = ', macd.result, ' signal = ', macd.signal);
+        log.debug(' macd  result = ', macd.result, ' signal = ', macd.signal.result);
       } else {
         this.trend.diff = diff;
       }
