@@ -49,6 +49,7 @@ method.check = function(candle) {
   const price = candle.close;
 
   var diff = 0;
+  var d = 4;
 
   if (smaShort.result > smaLong.result) {
 
@@ -70,7 +71,13 @@ method.check = function(candle) {
       this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
-    log.debug('In uptrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' macd ', macd.result, ' avgGap: ', this.trend.avgGap, ' C', price);
+    log.debug('In uptrend since', this.trend.duration, 'candle(s) -',
+      ' diff: ', diff.toFixed(d),
+      ' macd ', macd.result.toFixed(d),
+      ' macd signal ', macd.signal.result,
+      ' ema ', ema.result.toFixed(d),
+      ' avgGap: ', this.trend.avgGap.toFixed(d),
+      ' C', price);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
@@ -80,9 +87,6 @@ method.check = function(candle) {
         this.advice('short');
         this.trend.adviced = true;
         log.debug('TREND UP   >>>>>> CANDLE: H', candle.high, ' C', candle.close, ' O', candle.open, ' L', candle.low);
-        log.debug(' ema   result = ', ema.result);
-        log.debug(' sma   result = ', diff, ' short = ', smaShort.result, ' long: ', smaLong.result );
-        log.debug(' macd  result = ', macd.result, ' signal = ', macd.signal.result);
       } else {
         this.trend.diff = diff;
       }
@@ -111,7 +115,13 @@ method.check = function(candle) {
       this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
-    log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' macd ', macd.result, ' avgGap: ', this.trend.avgGap, ' C', price);
+    log.debug('In downtrend since', this.trend.duration, 'candle(s) -',
+      ' diff: ', diff.toFixed(d),
+      ' macd ', macd.result.toFixed(d),
+      ' macd signal ', macd.signal.result,
+      ' ema ', ema.result.toFixed(d),
+      ' avgGap: ', this.trend.avgGap.toFixed(d),
+      ' C', price);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
@@ -122,9 +132,6 @@ method.check = function(candle) {
         this.trend.adviced = true;
 
         log.debug('TREND DOWN >>>>>> CANDLE: H', candle.high, ' C', candle.close, ' O', candle.open, ' L', candle.low);
-        log.debug(' ema   result = ', ema.result);
-        log.debug(' sma   result = ', diff, ' short = ', smaShort.result, ' long: ', smaLong.result );
-        log.debug(' macd  result = ', macd.result, ' signal = ', macd.signal.result);
       } else {
         this.trend.diff = diff;
       }
