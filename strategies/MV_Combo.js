@@ -20,6 +20,7 @@ method.init = function() {
     duration: 0,
     persisted: false,
     diff: 0,
+    avgGap: 0,
     adviced: false
   };
 
@@ -51,6 +52,7 @@ method.check = function(candle) {
         persisted: false,
         direction: 'up',
         diff: 0,
+        avgGap: 0,
         adviced: false
       };
     }
@@ -58,13 +60,17 @@ method.check = function(candle) {
     this.trend.duration++;
     diff = smaShort.result - smaLong.result;
 
+    if (this.trend.duration > 1) {
+      this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / this.trend.duration;
+    }
+
     log.debug('In uptrend since', this.trend.duration, 'candle(s) - diff: ', diff);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (this.trend.diff > diff + this.settings.thresholds.smaDiffRange) {
+      if (this.trend.diff > diff + this.trend.avgGap) {
         this.advice('short');
         this.trend.adviced = true;
         log.debug('TREND UP   >>>>>> CANDLE: H: ' + candle.high + ' C: ' + candle.close + ' O: ' + candle.open + ' L: ' + candle.low);
@@ -86,6 +92,7 @@ method.check = function(candle) {
         persisted: false,
         direction: 'down',
         diff: 0,
+        avgGap: 0,
         adviced: false
       };
     }
@@ -93,13 +100,17 @@ method.check = function(candle) {
     this.trend.duration++;
     diff = smaLong.result - smaShort.result;
 
-    log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff);
+    if (this.trend.duration > 1) {
+      this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / this.trend.duration;
+    }
+
+    log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' avgGap: ', this.trend.avgGap);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (this.trend.diff > diff + this.settings.thresholds.smaDiffRange) {
+      if (this.trend.diff > diff + this.trend.avgGap) {
         this.advice('long');
         this.trend.adviced = true;
 

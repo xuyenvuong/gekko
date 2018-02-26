@@ -6,4 +6,3 @@ longWindowLength = 50
 down = -0.025
 up = 0.025
 persistence = 1
-smaDiffRange = 1
