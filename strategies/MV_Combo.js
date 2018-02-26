@@ -75,7 +75,7 @@ method.check = function(candle) {
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
       ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),'-', this.ema.toFixed(d),'=', (ema.result - this.ema) > 0 ? ' ':'', (ema.result - this.ema).toFixed(d),
-      ' C', price);
+      ' H', candle.high.toFixed(d), ' C', candle.close.toFixed(d), ' O', candle.open.toFixed(d), ' L', candle.low.toFixed(d));
 
   } else if (price < this.price) {
 
@@ -94,7 +94,7 @@ method.check = function(candle) {
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
       ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),'-', this.ema.toFixed(d),'=', (ema.result - this.ema) > 0 ? ' ':'', (ema.result - this.ema).toFixed(d),
-      ' C', price);
+      ' H', candle.high.toFixed(d), ' C', candle.close.toFixed(d), ' O', candle.open.toFixed(d), ' L', candle.low.toFixed(d));
   }
 
   this.price = price;
