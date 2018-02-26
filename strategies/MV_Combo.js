@@ -65,7 +65,7 @@ method.check = function(candle) {
   var emaDiff = ema.result - this.lastData.ema;
 
 
-  log.('cdlengulfing ', cdlengulfing);
+  log.debug('cdlengulfing ', cdlengulfing);
 
 
   return
