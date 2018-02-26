@@ -75,12 +75,12 @@ method.check = function(candle) {
 
     log.debug('+   Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
-      ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
+      ' macd-signal ', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),'-', this.lastData.ema.toFixed(d),'=', (ema.result - this.lastData.ema) > 0 ? ' ':'', (ema.result - this.lastData.ema).toFixed(d),
-      ' H', candle.high > this.lastData.candle.high ? '+' :'-', candle.high.toFixed(d),
-      ' C', candle.close > this.lastData.candle.close ? '+' :'-', candle.close.toFixed(d),
-      ' O', candle.open > this.lastData.candle.open ? '+' :'-', candle.open.toFixed(d),
-      ' L', candle.low > this.lastData.candle.low ? '+' :'-', candle.low.toFixed(d));
+      ' H', candle.high.toFixed(d),
+      ' C', candle.close.toFixed(d),
+      ' O', candle.open.toFixed(d),
+      ' L', candle.low.toFixed(d));
 
   } else if (price < this.lastData.candle.close) {
 
@@ -96,13 +96,13 @@ method.check = function(candle) {
     this.trend.duration++;
 
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
-      ' macd ', macd.result > 0 ? ' ': '', macd.result > this.lastData.macd.result ? '+' :'-',  macd.result.toFixed(d),
-      ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result > this.lastData.macd.signal.result ? '+' :'-', macd.signal.result.toFixed(d),
+      ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
+      ' macd-signal ', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),'-', this.lastData.ema.toFixed(d),'=', (ema.result - this.lastData.ema) > 0 ? ' ':'', (ema.result - this.lastData.ema).toFixed(d),
-      ' H', candle.high > this.lastData.candle.high ? '+' :'-', candle.high.toFixed(d),
-      ' C', candle.close > this.lastData.candle.close ? '+' :'-', candle.close.toFixed(d),
-      ' O', candle.open > this.lastData.candle.open ? '+' :'-', candle.open.toFixed(d),
-      ' L', candle.low > this.lastData.candle.low ? '+' :'-', candle.low.toFixed(d));
+      ' H', candle.high.toFixed(d),
+      ' C', candle.close.toFixed(d),
+      ' O', candle.open.toFixed(d),
+      ' L', candle.low.toFixed(d));
   }
 
   this.lastData.candle = candle;
