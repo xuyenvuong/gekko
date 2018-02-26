@@ -39,6 +39,8 @@ method.init = function() {
 
   this.addIndicator('ema', 'EMA', this.settings.ema.weight);
   this.addIndicator('macd', 'MACD', this.settings.macd);
+  this.addTalibIndicator('cdlengulfing', 'CDLENGULFING', this.settings);
+
 }
 
 
@@ -48,10 +50,12 @@ method.log = function(candle) {
 }
 
 method.check = function(candle) {
-  var smaShort = this.indicators.smaShort;
-  var smaLong = this.indicators.smaLong;
+  //var smaShort = this.indicators.smaShort;
+  //var smaLong = this.indicators.smaLong;
   var ema = this.indicators.ema;
   var macd = this.indicators.macd;
+
+  var cdlengulfing = this.talibIndicators.cdlengulfing;
 
   const price = candle.close;
 
@@ -59,6 +63,12 @@ method.check = function(candle) {
   var d = 4;
 
   var emaDiff = ema.result - this.lastData.ema;
+
+
+  log.('cdlengulfing ', cdlengulfing);
+
+
+  return
 
   if (!this.lastData.candle) {
     this.lastData.candle = candle;
