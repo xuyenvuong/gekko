@@ -71,13 +71,13 @@ method.check = function(candle) {
 
     this.trend.duration++;
 
-    log.debug('- Down trend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+    log.debug('+ Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
       ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),'-', this.ema.toFixed(d),'=', (ema.result - this.ema) > 0 ? ' ':'', (ema.result - this.ema).toFixed(d),
       ' C', price);
 
-  } else if (price < this.trend.price) {
+  } else if (price < this.price) {
 
     if (this.trend.direction != 'down') {
       this.trend = {
@@ -90,7 +90,7 @@ method.check = function(candle) {
 
     this.trend.duration++;
 
-    log.debug('+ Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+    log.debug('- Downtrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
       ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d),'-', this.ema.toFixed(d),'=', (ema.result - this.ema) > 0 ? ' ':'', (ema.result - this.ema).toFixed(d),
