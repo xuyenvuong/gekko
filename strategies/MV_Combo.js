@@ -58,6 +58,8 @@ method.check = function(candle) {
   var diff = 0;
   var d = 4;
 
+  var emaDiff = ema.result - this.lastData.ema;
+
   if (!this.lastData.candle) {
     this.lastData.candle = candle;
   } else if (price > this.lastData.candle.close) {
@@ -76,7 +78,7 @@ method.check = function(candle) {
     log.debug('+   Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
       ' macd-signal ', macd.signal.result.toFixed(d),
-      ' ema ', ema.result.toFixed(d),'-', this.lastData.ema.toFixed(d),'=', (ema.result - this.lastData.ema) > 0 ? ' ':'', (ema.result - this.lastData.ema).toFixed(d),
+      ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' H', candle.high.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
@@ -98,7 +100,7 @@ method.check = function(candle) {
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d),
       ' macd-signal ', macd.signal.result.toFixed(d),
-      ' ema ', ema.result.toFixed(d),'-', this.lastData.ema.toFixed(d),'=', (ema.result - this.lastData.ema) > 0 ? ' ':'', (ema.result - this.lastData.ema).toFixed(d),
+      ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' H', candle.high.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
