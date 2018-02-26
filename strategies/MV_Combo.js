@@ -39,7 +39,7 @@ method.init = function() {
 
   this.addIndicator('ema', 'EMA', this.settings.ema.weight);
   this.addIndicator('macd', 'MACD', this.settings.macd);
-  this.addTalibIndicator('cdlengulfing', 'CDLENGULFING', this.settings);
+  this.addTalibIndicator('cdlengulfing', 'CDLDOJI', this.settings);
 
 }
 
@@ -65,7 +65,8 @@ method.check = function(candle) {
   var emaDiff = ema.result - this.lastData.ema;
 
 
-  log.debug('cdlengulfing ', cdlengulfing);
+  //log.debug('cdlengulfing ', cdlengulfing);
+  log.debug('cdlengulfing ');
 
 
   return
