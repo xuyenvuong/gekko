@@ -70,7 +70,7 @@ method.check = function(candle) {
       this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
-    log.debug('In uptrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' macd ', macd.result, ' avgGap: ', this.trend.avgGap);
+    log.debug('In uptrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' macd ', macd.result, ' avgGap: ', this.trend.avgGap, ' C', price);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
@@ -111,7 +111,7 @@ method.check = function(candle) {
       this.trend.avgGap = ((diff - this.trend.diff) + this.trend.avgGap) / (this.trend.duration - 1);
     }
 
-    log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' macd ', macd.result, ' avgGap: ', this.trend.avgGap);
+    log.debug('In downtrend since', this.trend.duration, 'candle(s) - diff: ', diff, ' macd ', macd.result, ' avgGap: ', this.trend.avgGap, ' C', price);
 
     if(this.trend.duration >= this.settings.thresholds.persistence)
       this.trend.persisted = true;
