@@ -31,7 +31,7 @@ method.init = function() {
   this.addIndicator('smaLong', 'SMA', this.settings.sma.longWindowLength);
 
   this.addIndicator('ema', 'EMA', this.settings.ema.weight);
-  this.addIndicator('macd', 'MACD', this.settings);
+  this.addIndicator('macd', 'MACD', this.settings.macd);
 }
 
 
