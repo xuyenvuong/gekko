@@ -82,7 +82,7 @@ method.check = function(candle) {
 
     log.debug('+   Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
-      ' macd-signal ', macd.signal.result.toFixed(d),
+      ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' H', candle.high.toFixed(d),
       ' C', candle.close.toFixed(d),
@@ -126,7 +126,7 @@ method.check = function(candle) {
 
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
-      ' macd-signal ', macd.signal.result.toFixed(d),
+      ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
       ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' H', candle.high.toFixed(d),
       ' C', candle.close.toFixed(d),
@@ -138,7 +138,7 @@ method.check = function(candle) {
 
     if(this.trend.persisted && !this.trend.adviced) {
       if (macd.signal.result > 1.0 && macd.signal.result < 2.0 && this.trend.duration > 5) {
-        if (emaDiff > this.lastData.emaDiff && emaDiff < 0) {
+        if (emaDiff > this.lastData.emaDiff) {
           this.advice('long');
           this.trend.adviced = true;
           this.lastData.pl -= candle.close;
