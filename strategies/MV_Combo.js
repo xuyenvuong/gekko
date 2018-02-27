@@ -90,7 +90,7 @@ method.check = function(candle) {
 
     if (macd.signal.result > 1.0) {
       log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
-    } else if (macd.signal.result < -1.0) {
+    } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
       if (emaDiff < this.lastData.emaDiff) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD -1.0 EMA', candle.close.toFixed(d));
       }
@@ -117,7 +117,7 @@ method.check = function(candle) {
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
 
-    if (macd.signal.result < -1.0) {
+    if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
       if (emaDiff > this.lastData.emaDiff) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
       }
