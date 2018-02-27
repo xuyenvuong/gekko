@@ -27,7 +27,8 @@ method.init = function() {
   this.lastData = {
     candle: null,
     ema: 0,
-    macd: null
+    macd: 0,
+    macdSignal: 0
   }
 
 
@@ -62,8 +63,8 @@ method.check = function(candle) {
   var macdDiff = 0;
 
   if (this.lastData.macd) {
-    macdDiff = macd.result - this.lastData.macd.result;
-    log.debug('here ', macdDiff, macd.result, this.lastData.macd.result);
+    macdDiff = macd.result - this.lastData.macd;
+    log.debug('here ', macdDiff, macd.result, this.lastData.macd);
   }
 
   if (macd.result > 0) {
@@ -113,7 +114,8 @@ method.check = function(candle) {
 
   this.lastData.candle = candle;
   this.lastData.ema = ema.result;
-  this.lastData.macd = macd;
+  this.lastData.macd = macd.result;
+  this.lastData.macdSignal = macd.signal.result;
 
 
   return
