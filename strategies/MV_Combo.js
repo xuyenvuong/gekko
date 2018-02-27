@@ -150,6 +150,7 @@ method.check = function(candle) {
               this.advice('long');
               this.trend.adviced = true;
               this.lastData.pl -= candle.close;
+              log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -1.5', candle.close.toFixed(d), 'pl:', this.lastData.pl);
             }
           }
       } else if (macd.signal.result <= -15) { // Way too down
