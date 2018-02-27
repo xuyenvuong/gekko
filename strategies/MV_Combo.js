@@ -27,6 +27,7 @@ method.init = function() {
   this.lastData = {
     candle: null,
     ema: 0,
+    emaDiff: 0,
     macd: 0,
     macdSignal: 0
   }
@@ -113,10 +114,17 @@ method.check = function(candle) {
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
+
+    if (macd.signal.result <= -1.0) {
+      if (emaDiff > this.lastData.emaDiff) {
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY ', candle.close.toFixed(d));
+      }
+    }
   }
 
   this.lastData.candle = candle;
   this.lastData.ema = ema.result;
+  this.lastData.emaDiff = emaDiff;
   this.lastData.macd = macd.result;
   this.lastData.macdSignal = macd.signal.result;
 
