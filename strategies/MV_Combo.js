@@ -63,7 +63,7 @@ method.check = function(candle) {
 
   if (this.lastData.macd) {
     macdDiff = macd.result - this.lastData.macd.result;
-    log.debug('here ', macdDiff);
+    log.debug('here ', macdDiff, macd.result, this.lastData.macd.result);
   }
 
   if (macd.result > 0) {
