@@ -153,13 +153,6 @@ method.check = function(candle) {
             log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -1.5', candle.close.toFixed(d), 'pl:', this.lastData.pl);
           }
         }
-      /*} else if (macd.signal.result <= -7.0) { // Way too down
-        if (emaDiff > this.lastData.emaDiff) {
-          this.advice('long');
-          this.trend.adviced = true;
-          this.lastData.pl -= candle.close;
-          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
-        }*/
       } else if (macd.signal.result <= -15) { // Way too down
         if (emaDiff > this.lastData.emaDiff) {
           this.advice('long');
@@ -167,7 +160,7 @@ method.check = function(candle) {
           this.lastData.pl -= candle.close;
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
-      } else if (this.trend.duration < 5)
+      } else if (this.trend.duration < 5) {
         if ((macd.signal.result < 0 && macd.signal.result < this.lastData.signal.result * 2) ||
             (macd.signal.result > 0 && macd.signal.result > this.lastData.signal.result * 2)) {
           this.advice('long');
