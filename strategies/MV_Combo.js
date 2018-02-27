@@ -88,11 +88,13 @@ method.check = function(candle) {
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
 
-    if (macd.signal.result >= 1.0 ) {
+    if (macd.signal.result > 1.0) {
       log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
-    } //else if (emaDiff < this.lastData.emaDiff) {
-      //log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by EMA', candle.close.toFixed(d));
-    //}
+    } else if (macd.signal.result < -1.0) {
+      if (emaDiff < this.lastData.emaDiff) {
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD -1.0 EMA', candle.close.toFixed(d));
+      }
+    }
 
   } else if (macd.result < 0) {
     if (this.trend.direction != 'down') {
@@ -115,9 +117,9 @@ method.check = function(candle) {
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
 
-    if (macd.signal.result <= -1.0) {
+    if (macd.signal.result < -1.0) {
       if (emaDiff > this.lastData.emaDiff) {
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY ', candle.close.toFixed(d));
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
       }
     }
   }
