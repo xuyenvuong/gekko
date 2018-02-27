@@ -94,17 +94,17 @@ method.check = function(candle) {
 
     if(this.trend.persisted && !this.trend.adviced) {
       if (macd.signal.result > 1.0) {
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal 1.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         this.advice('short');
         this.trend.adviced = true;
         this.lastData.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal 1.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
         if (this.trend.duration <= 5) {
           if (emaDiff < this.lastData.emaDiff) {
-            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal -1.0 EMA', candle.close.toFixed(d), 'pl:', this.lastData.pl);
             this.advice('short');
             this.trend.adviced = true;
             this.lastData.pl += candle.close;
+            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal -1.0 EMA', candle.close.toFixed(d), 'pl:', this.lastData.pl);
           }
         }
       }
@@ -139,15 +139,14 @@ method.check = function(candle) {
     if(this.trend.persisted && !this.trend.adviced) {
       if (macd.signal.result > 1.0 && macd.signal.result < 2.0 && this.trend.duration > 5) {
         if (emaDiff > this.lastData.emaDiff && emaDiff < 0) {
-          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal 1.0-2.0 emaDiff < 0 ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
           this.advice('long');
           this.trend.adviced = true;
           this.lastData.pl -= candle.close;
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal 1.0-2.0 emaDiff < 0 ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) { // kinda side way
           if (macd.signal.result >= -1.5) {
             if (emaDiff > this.lastData.emaDiff) {
-              log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
               this.advice('long');
               this.trend.adviced = true;
               this.lastData.pl -= candle.close;
@@ -158,7 +157,6 @@ method.check = function(candle) {
           this.advice('long');
           this.trend.adviced = true;
           this.lastData.pl -= candle.close;
-
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
       }
