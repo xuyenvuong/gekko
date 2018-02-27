@@ -88,12 +88,19 @@ method.check = function(candle) {
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
 
-    if (macd.signal.result > 1.0) {
-      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
-    } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
-      if (emaDiff < this.lastData.emaDiff) {
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD -1.0 EMA', candle.close.toFixed(d));
+    if(this.trend.duration >= this.settings.thresholds.persistence)
+      this.trend.persisted = true;
+
+    if(this.trend.persisted && !this.trend.adviced) {
+      if (macd.signal.result > 1.0) {
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
+      } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
+        if (emaDiff < this.lastData.emaDiff) {
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD -1.0 EMA', candle.close.toFixed(d));
+        }
       }
+    } else {
+      //this.advice();
     }
 
   } else if (macd.result < 0) {
@@ -117,10 +124,17 @@ method.check = function(candle) {
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
 
-    if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
-      if (emaDiff > this.lastData.emaDiff) {
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
+    if(this.trend.duration >= this.settings.thresholds.persistence)
+      this.trend.persisted = true;
+
+    if(this.trend.persisted && !this.trend.adviced) {
+      if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
+        if (emaDiff > this.lastData.emaDiff) {
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
+        }
       }
+    } else {
+      //this.advice();
     }
   }
 
