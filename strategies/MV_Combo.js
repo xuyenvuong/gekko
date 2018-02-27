@@ -90,9 +90,9 @@ method.check = function(candle) {
 
     if (macd.signal.result >= 1.0 ) {
       log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
-    } else if (emaDiff < this.lastData.emaDiff) {
-      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by EMA', candle.close.toFixed(d));
-    }
+    } //else if (emaDiff < this.lastData.emaDiff) {
+      //log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by EMA', candle.close.toFixed(d));
+    //}
 
   } else if (macd.result < 0) {
     if (this.trend.direction != 'down') {
