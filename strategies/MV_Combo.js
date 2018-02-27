@@ -59,6 +59,59 @@ method.check = function(candle) {
   var d = 4;
 
   var emaDiff = ema.result - this.lastData.ema;
+  var macdDiff = macd.result - this.lastData.macd.result;
+
+  if (macd.result > 0) {
+
+    if (this.trend.direction != 'up') {
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'up',
+        adviced: false
+      };
+    }
+
+    this.trend.duration++;
+
+    log.debug('+   Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+      ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
+      ' macd-signal ', macd.signal.result.toFixed(d),
+      ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
+      ' H', candle.high.toFixed(d),
+      ' C', candle.close.toFixed(d),
+      ' O', candle.open.toFixed(d),
+      ' L', candle.low.toFixed(d));
+
+  } else if (macd.result < 0) {
+
+    if (this.trend.direction != 'down') {
+      this.trend = {
+        duration: 0,
+        persisted: false,
+        direction: 'down',
+        adviced: false
+      };
+    }
+
+    this.trend.duration++;
+
+    log.debug('- Downtrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+      ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
+      ' macd-signal ', macd.signal.result.toFixed(d),
+      ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
+      ' H', candle.high.toFixed(d),
+      ' C', candle.close.toFixed(d),
+      ' O', candle.open.toFixed(d),
+      ' L', candle.low.toFixed(d));
+  }
+
+  this.lastData.candle = candle;
+  this.lastData.ema = ema.result;
+  this.lastData.macd = macd;
+
+
+  return
 
   if (!this.lastData.candle) {
     this.lastData.candle = candle;
