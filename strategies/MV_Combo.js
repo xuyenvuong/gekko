@@ -93,11 +93,11 @@ method.check = function(candle) {
 
     if(this.trend.persisted && !this.trend.adviced) {
       if (macd.signal.result > 1.0) {
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal 1.0', candle.close.toFixed(d));
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
         if (this.trend.duration <= 5) {
           if (emaDiff < this.lastData.emaDiff) {
-            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD -1.0 EMA', candle.close.toFixed(d));
+            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal -1.0 EMA', candle.close.toFixed(d));
           }
         }
       }
@@ -130,13 +130,15 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
-        if (macd.signal.result >= -1.5) {
-          if (emaDiff > this.lastData.emaDiff) {
-            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
+      if (macd.signal.result > 1.0) {
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal 1.0', candle.close.toFixed(d));
+      } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) { // kinda side way
+          if (macd.signal.result >= -1.5) {
+            if (emaDiff > this.lastData.emaDiff) {
+              log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
+            }
           }
-        }
-      } else if (macd.signal.result <= -15) {
+      } else if (macd.signal.result <= -15) { // Way too down
         if (emaDiff > this.lastData.emaDiff) {
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d));
         }
