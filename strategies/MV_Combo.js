@@ -136,6 +136,10 @@ method.check = function(candle) {
             log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY MACD -1.0', candle.close.toFixed(d));
           }
         }
+      } else if (macd.sigal.result <= -15) {
+        if (emaDiff > this.lastData.emaDiff) {
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d));
+        }
       }
     } else {
       this.advice();
