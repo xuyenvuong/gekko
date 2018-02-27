@@ -161,8 +161,8 @@ method.check = function(candle) {
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
       } else if (this.trend.duration < 5) {
-        if ((macd.signal.result < 0 && macd.signal.result < this.lastData.signal.result * 2) ||
-            (macd.signal.result > 0 && macd.signal.result > this.lastData.signal.result * 2)) {
+        if ((macd.signal.result < 0 && macd.signal.result < this.lastData.macdSignal * 2) ||
+            (macd.signal.result > 0 && macd.signal.result * 2 < this.lastData.macdSignal)) {
           this.advice('long');
           this.trend.adviced = true;
           this.lastData.pl -= candle.close;
