@@ -68,7 +68,6 @@ method.check = function(candle) {
   }
 
   if (macd.result > 0) {
-
     if (this.trend.direction != 'up') {
       this.trend = {
         duration: 0,
@@ -90,11 +89,12 @@ method.check = function(candle) {
       ' L', candle.low.toFixed(d));
 
     if (macd.signal.result >= 1.0 ) {
-      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL ', candle.close.toFixed(d));
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
+    } else if (emaDiff < this.lastData.emaDiff) {
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by EMA', candle.close.toFixed(d));
     }
 
   } else if (macd.result < 0) {
-
     if (this.trend.direction != 'down') {
       this.trend = {
         duration: 0,
