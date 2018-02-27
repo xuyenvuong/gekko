@@ -59,7 +59,7 @@ method.check = function(candle) {
   var d = 4;
 
   var emaDiff = ema.result - this.lastData.ema;
-  var macdDiff = macd.result - (this.lastData.macd.result || 0);
+  var macdDiff = macd.result - (this.lastData.macd ? this.lastData.macd.result : 0);
 
   if (macd.result > 0) {
 
