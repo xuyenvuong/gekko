@@ -7,8 +7,6 @@
 var _ = require('lodash');
 var log = require('../core/log.js');
 
-var talib = require('../core/talib.js');
-
 // let's create our own method
 var method = {};
 
@@ -61,11 +59,6 @@ method.check = function(candle) {
   var d = 4;
 
   var emaDiff = ema.result - this.lastData.ema;
-
-
-  talib.cdldojistar.create();
-
-  return;
 
   if (!this.lastData.candle) {
     this.lastData.candle = candle;
