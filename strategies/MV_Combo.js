@@ -7,6 +7,8 @@
 var _ = require('lodash');
 var log = require('../core/log.js');
 
+var talib = require('../core/talib.js');
+
 // let's create our own method
 var method = {};
 
@@ -39,8 +41,6 @@ method.init = function() {
 
   this.addIndicator('ema', 'EMA', this.settings.ema.weight);
   this.addIndicator('macd', 'MACD', this.settings.macd);
-  this.addTalibIndicator('cdlengulfing', 'CDLDOJI', this.settings);
-
 }
 
 
@@ -55,8 +55,6 @@ method.check = function(candle) {
   var ema = this.indicators.ema;
   var macd = this.indicators.macd;
 
-  var cdlengulfing = this.talibIndicators.cdlengulfing;
-
   const price = candle.close;
 
   var diff = 0;
@@ -65,11 +63,9 @@ method.check = function(candle) {
   var emaDiff = ema.result - this.lastData.ema;
 
 
-  //log.debug('cdlengulfing ', cdlengulfing);
-  log.debug('cdlengulfing ');
+  talib.cdldojistar.create();
 
-
-  return
+  return;
 
   if (!this.lastData.candle) {
     this.lastData.candle = candle;
