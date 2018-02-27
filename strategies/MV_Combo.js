@@ -95,11 +95,11 @@ method.check = function(candle) {
       if (macd.signal.result > 1.0) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD 1.0', candle.close.toFixed(d));
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
-        if (macd.result < 0) {
-          if (emaDiff < this.lastData.emaDiff) {
+        if (emaDiff < this.lastData.emaDiff) {
             log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by MACD -1.0 EMA', candle.close.toFixed(d));
-          }
-        }
+        } //else if (this.trend.duration <= 5) {
+          //log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by duration <= 5', candle.close.toFixed(d));
+        //}
       }
     } else {
       //this.advice();
