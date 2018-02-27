@@ -88,6 +88,10 @@ method.check = function(candle) {
       ' O', candle.open.toFixed(d),
       ' L', candle.low.toFixed(d));
 
+    if (macd.signal.result >= 1.0 ) {
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL ', candle.close.toFixed(d));
+    }
+
   } else if (macd.result < 0) {
 
     if (this.trend.direction != 'down') {
