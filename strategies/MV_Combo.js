@@ -57,11 +57,13 @@ method.check = function(candle) {
 
   var d = 4;
 
-  var emaDiff = ema.result - this.lastData.ema;
+  var ema = ema.result;
+  var emaDiff = ema - this.lastData.ema;
+  var macdResult = macd.result;
   var macdSignal = macd.signal.result;
-  var macdDiff = (this.lastData.macd) ? macd.result - this.lastData.macd : 0;
+  var macdDiff = (this.lastData.macd) ? macdResult - this.lastData.macd : 0;
 
-  if (macd.result > 0) {
+  if (macdResult > 0) {
     if (this.trend.direction != 'up') {
       var isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
@@ -76,9 +78,9 @@ method.check = function(candle) {
     this.trend.duration++;
 
     log.debug('+   Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
-      ' macd ', macd.result > 0 ? ' ': '', macd.result.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
-      ' macd-signal ', macd.signal.result > 0 ? ' ': '', macd.signal.result.toFixed(d),
-      ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
+      ' macd ', macdResult > 0 ? ' ': '', macdResult.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
+      ' macd-signal ', macdSignal > 0 ? ' ': '', macdSignal.toFixed(d),
+      ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
       ' H', candle.high.toFixed(d),
@@ -88,21 +90,21 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (macd.signal.result > 1.0 && macd.signal.result < 2.0 && this.trend.duration > 5) {
+      if (macdSignal > 1.0 && macdSignal < 2.0 && this.trend.duration > 5) {
         if (emaDiff < this.lastData.emaDiff) {
           this.advice('short');
           this.trend.adviced = true;
           this.lastData.pl += candle.close;
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal 1.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
-      } else if (macd.signal.result > 2.0) {
-        if (macd.signal.result < this.lastData.macdSignal || (this.trend.duration > 15 && macdDiff < 0)) {
+      } else if (macdSignal > 2.0) {
+        if (macdSignal < this.lastData.macdSignal || (this.trend.duration > 15 && macdDiff < 0)) {
           this.advice('short');
           this.trend.adviced = true;
           this.lastData.pl += candle.close;
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal >2.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
-      } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
+      } else if (macdSignal < -1.0 && macdSignal > -2.0) {
         if (this.trend.duration <= 5) {
           if (emaDiff < this.lastData.emaDiff) {
             this.advice('short');
@@ -116,7 +118,7 @@ method.check = function(candle) {
       this.advice();
     }
 
-  } else if (macd.result < 0) {
+  } else if (macdResult < 0) {
     if (this.trend.direction != 'down') {
       var isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
@@ -131,9 +133,9 @@ method.check = function(candle) {
     this.trend.duration++;
 
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ' : '', this.trend.duration, 'candle(s) -',
-      ' macd ', macd.result > 0 ? ' ' : '', macd.result.toFixed(d), macdDiff > 0 ? ' ' : '', macdDiff.toFixed(d),
-      ' macd-signal ', macd.signal.result > 0 ? ' ' : '', macd.signal.result.toFixed(d),
-      ' ema ', ema.result.toFixed(d), emaDiff > 0 ? ' ' : '', emaDiff.toFixed(d),
+      ' macd ', macdResult > 0 ? ' ' : '', macdResult.toFixed(d), macdDiff > 0 ? ' ' : '', macdDiff.toFixed(d),
+      ' macd-signal ', macdSignal > 0 ? ' ' : '', macdSignal.toFixed(d),
+      ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ' : '', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
       ' H', candle.high.toFixed(d),
@@ -143,23 +145,23 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if (this.trend.persisted && !this.trend.adviced) {
-      if (macd.signal.result > 1.0 && macd.signal.result < 2.0 && this.trend.duration > 5) {
+      if (macdSignal > 1.0 && macdSignal < 2.0 && this.trend.duration > 5) {
         if (emaDiff > this.lastData.emaDiff) {
           this.advice('long');
           this.trend.adviced = true;
           this.lastData.pl -= candle.close;
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal 1.0-2.0 emaDiff < 0 ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
-      } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) { // kinda side way
-        if (macd.signal.result >= -1.5 && this.trend.duration <= 15) {
-          if (emaDiff > this.lastData.emaDiff && macd.signal.result * 2.0 < macd.result + macdDiff) {
+      } else if (macdSignal < -1.0 && macdSignal > -2.0) { // kinda side way
+        if (macdSignal >= -1.5 && this.trend.duration <= 15) {
+          if (emaDiff > this.lastData.emaDiff && macdSignal * 2.0 < macdResult + macdDiff) {
             this.advice('long');
             this.trend.adviced = true;
             this.lastData.pl -= candle.close;
             log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -1.5', candle.close.toFixed(d), 'pl:', this.lastData.pl);
           }
         }
-      } else if (macd.signal.result <= -15.0) { // Way too down
+      } else if (macdSignal <= -15.0) { // Way too down
         if (emaDiff > this.lastData.emaDiff) {
           this.advice('long');
           this.trend.adviced = true;
@@ -167,8 +169,8 @@ method.check = function(candle) {
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
       } else if (this.trend.duration < 5) {
-        if ((macd.signal.result < 0 && this.lastData.macdSignal < 0 && macd.signal.result < this.lastData.macdSignal * 2) ||
-            (macd.signal.result > 0 && this.lastData.macdSignal > 0 && macd.signal.result * 2 < this.lastData.macdSignal)) {
+        if ((macdSignal < 0 && this.lastData.macdSignal < 0 && macdSignal < this.lastData.macdSignal * 2) ||
+            (macdSignal > 0 && this.lastData.macdSignal > 0 && macdSignal * 2 < this.lastData.macdSignal)) {
           this.advice('long');
           this.trend.adviced = true;
           this.lastData.pl -= candle.close;
@@ -181,10 +183,10 @@ method.check = function(candle) {
   }
 
   this.lastData.candle = candle;
-  this.lastData.ema = ema.result;
+  this.lastData.ema = ema;
   this.lastData.emaDiff = emaDiff;
-  this.lastData.macd = macd.result;
-  this.lastData.macdSignal = macd.signal.result;
+  this.lastData.macd = macdResult;
+  this.lastData.macdSignal = macdSignal;
 }
 
 module.exports = method;
