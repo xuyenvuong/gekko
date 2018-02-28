@@ -141,7 +141,7 @@ method.check = function(candle) {
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal 1.0-2.0 emaDiff < 0 ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) { // kinda side way
-        if (macd.signal.result >= -1.5) {
+        if (macd.signal.result >= -1.5 && this.trend.duration <= 15) {
           if (emaDiff > this.lastData.emaDiff && macd.signal.result * 2.0 < macd.result + macdDiff) {
             this.advice('long');
             this.trend.adviced = true;
