@@ -142,14 +142,14 @@ method.check = function(candle) {
         }
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) { // kinda side way
         if (macd.signal.result >= -1.5) {
-          if (emaDiff > this.lastData.emaDiff) {
+          if (emaDiff > this.lastData.emaDiff && macd.signal.result * 2.0 < macdDiff) {
             this.advice('long');
             this.trend.adviced = true;
             this.lastData.pl -= candle.close;
             log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -1.5', candle.close.toFixed(d), 'pl:', this.lastData.pl);
           }
         }
-      } else if (macd.signal.result <= -15) { // Way too down
+      } else if (macd.signal.result <= -15.0) { // Way too down
         if (emaDiff > this.lastData.emaDiff) {
           this.advice('long');
           this.trend.adviced = true;
