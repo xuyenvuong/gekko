@@ -90,8 +90,15 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (macdSignal > 1.0 && macdSignal < 2.0 && this.trend.duration > 5) {
-        if (emaDiff < this.lastData.emaDiff && macdSignal * 2.0 < macdResult + macdDiff) {
+      if (this.trend.duration > 15) {
+        if (this.trend.duration > 15 && emaDiff < this.lastData.emaDiff) {
+          this.advice('short');
+          this.trend.adviced = true;
+          this.lastData.pl += candle.close;
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Duration >15', candle.close.toFixed(d), 'pl:', this.lastData.pl);
+        }
+      } else if (macdSignal > 1.0 && macdSignal < 2.0 && this.trend.duration > 5 && this.trend.duration < 15) {
+        if (emaDiff < this.lastData.emaDiff) {
           this.advice('short');
           this.trend.adviced = true;
           this.lastData.pl += candle.close;
