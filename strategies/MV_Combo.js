@@ -58,6 +58,7 @@ method.check = function(candle) {
   var d = 4;
 
   var emaDiff = ema.result - this.lastData.ema;
+  var macdSignal = macd.signal.result;
   var macdDiff = (this.lastData.macd) ? macd.result - this.lastData.macd : 0;
 
   if (macd.result > 0) {
@@ -95,7 +96,7 @@ method.check = function(candle) {
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal 1.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
       } else if (macd.signal.result > 2.0) {
-        if (macd.signal.result < this.lastData.macdSignal || this.trend.duration > 15) {
+        if (macd.signal.result < this.lastData.macdSignal || (this.trend.duration > 15 && macdDiff < 0)) {
           this.advice('short');
           this.trend.adviced = true;
           this.lastData.pl += candle.close;
