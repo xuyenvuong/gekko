@@ -13,4 +13,4 @@ signal = 9
 [thresholds]
 down = -0.025
 up = 0.025
-persistence = 1
+persistence = 2
