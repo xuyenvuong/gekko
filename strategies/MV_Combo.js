@@ -91,7 +91,7 @@ method.check = function(candle) {
 
     if(this.trend.persisted && !this.trend.adviced) {
       if (macdSignal > 1.0 && macdSignal < 2.0 && this.trend.duration > 5) {
-        if (emaDiff < this.lastData.emaDiff) {
+        if (emaDiff < this.lastData.emaDiff && macdSignal * 2.0 < macdResult + macdDiff) {
           this.advice('short');
           this.trend.adviced = true;
           this.lastData.pl += candle.close;
