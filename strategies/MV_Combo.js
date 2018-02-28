@@ -162,6 +162,13 @@ method.check = function(candle) {
           }
         }
       } else if (macdSignal <= -15.0) { // Way too down
+          if (emaDiff > this.lastData.emaDiff) {
+            this.advice('long');
+            this.trend.adviced = true;
+            this.lastData.pl -= candle.close;
+            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal -15.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
+          }
+      } else if (macdSignal >= 2.0 && this.trend.duration > 15 && emaDiff > this.lastData.emaDiff) { // Way too down
         if (emaDiff > this.lastData.emaDiff) {
           this.advice('long');
           this.trend.adviced = true;
