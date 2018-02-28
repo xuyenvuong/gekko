@@ -142,7 +142,7 @@ method.check = function(candle) {
         }
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) { // kinda side way
         if (macd.signal.result >= -1.5) {
-          if (emaDiff > this.lastData.emaDiff && macd.signal.result * 2.0 < macd.result) {
+          if (emaDiff > this.lastData.emaDiff && macd.signal.result * 2.0 < macd.result + macdDiff) {
             this.advice('long');
             this.trend.adviced = true;
             this.lastData.pl -= candle.close;
