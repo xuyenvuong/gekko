@@ -87,13 +87,18 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
-      if (macd.signal.result > 1.0) {
+      if (macd.signal.result > 1.0 && macd.signal.result < 2.0 && this.trend.duration > 5) {
         if (emaDiff < this.lastData.emaDiff) {
           this.advice('short');
           this.trend.adviced = true;
           this.lastData.pl += candle.close;
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal 1.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
+      } else if (macd.signal.result > 2.0 && macd.signal.result < this.lastData.macdSignal) {
+        this.advice('short');
+        this.trend.adviced = true;
+        this.lastData.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal >2.0', candle.close.toFixed(d), 'pl:', this.lastData.pl);
       } else if (macd.signal.result < -1.0 && macd.signal.result > -2.0) {
         if (this.trend.duration <= 5) {
           if (emaDiff < this.lastData.emaDiff) {
