@@ -190,9 +190,9 @@ method.check = function(candle) {
           this.lastData.pl -= candle.close;
           log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Signal 2X', candle.close.toFixed(d), 'pl:', this.lastData.pl);
         }
-      } else {
-        this.advice();
       }
+    } else {
+      this.advice();
     }
   }
 
