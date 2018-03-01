@@ -64,6 +64,10 @@ method.check = function(candle) {
   var d = 4;
   var isAdviced = false;
 
+  if (this.pl) {
+    log.debug("Candle start:", candle.start);
+  }
+
   if (macd > 0) {
     if (this.trend.direction != 'up') {
       isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
