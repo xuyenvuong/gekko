@@ -62,7 +62,7 @@ method.check = function(candle) {
 
   var d = 4;
 
-  log.debug('candle.date ', candle.dateTime,
+  log.debug('candle.date ', candle,
     ' C', candle.close.toFixed(d),
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
