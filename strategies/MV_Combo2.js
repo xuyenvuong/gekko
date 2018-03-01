@@ -65,24 +65,10 @@ method.check = function(candle) {
 
   log.debug('check start');
 
-  if (cs.isHammer(
-      {
-        close: candle.close,
-        open: candle.open,
-        high: candle.high,
-        low: candle.low
-      }
-    )) {
+  if (cs.isHammer(candle)) {
     log.debug('isHammer ', candle);
-  } else if (cs.isHangingMan(
-      {
-        close: candle.close,
-        open: candle.open,
-        high: candle.high,
-        low: candle.low
-      }
-    )) {
-    log.debug('isHangingMan ', candle);
+  } else if (cs.isInvertedHammer(candle)) {
+    log.debug('isInvertedHammer ', candle);
   }
 
   return
