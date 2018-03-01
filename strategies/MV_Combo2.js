@@ -81,7 +81,7 @@ method.check = function(candle) {
     log.debug(' +  Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd > 0 ? ' ': '', macd.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
       ' short ', macdShort > 0 ? ' ': '', macdShort.toFixed(d),
-      ' short ', macdLong > 0 ? ' ': '', macdLong.toFixed(d),
+      ' long ', macdLong > 0 ? ' ': '', macdLong.toFixed(d),
       ' signal ', signal > 0 ? ' ': '', signal.toFixed(d),
       ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
@@ -125,7 +125,7 @@ method.check = function(candle) {
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ' : '', this.trend.duration, 'candle(s) -',
       ' macd ', macd > 0 ? ' ': '', macd.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
       ' short ', macdShort > 0 ? ' ': '', macdShort.toFixed(d),
-      ' short ', macdLong > 0 ? ' ': '', macdLong.toFixed(d),
+      ' long ', macdLong > 0 ? ' ': '', macdLong.toFixed(d),
       ' signal ', signal > 0 ? ' ': '', signal.toFixed(d),
       ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
@@ -153,7 +153,8 @@ method.check = function(candle) {
     }
   }
 
-  this.lastData.candle = candle;
+  //this.lastData.candle = JSON.parse(JSON.stringify(candle));
+  this.lastData.candle = Object.assign({}, candle);
   this.lastData.ema = ema;
   this.lastData.emaDiff = emaDiff;
   this.lastData.macd = macd;
