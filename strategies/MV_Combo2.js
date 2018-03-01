@@ -63,14 +63,6 @@ method.check = function(candle) {
 
   var d = 4;
 
-  /* if (cs.isHammer(candle)) {
-    log.debug('isHammer ', candle);
-  } else if (cs.isInvertedHammer(candle)) {
-    log.debug('isInvertedHammer ', candle);
-  }*/
-
-  return
-
   if (macd > 0) {
     if (this.trend.direction != 'up') {
       var isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
