@@ -62,6 +62,14 @@ method.check = function(candle) {
 
   var d = 4;
 
+  log.debug('candle.date ', candle.date,
+    ' C', candle.close.toFixed(d),
+    ' O', candle.open.toFixed(d),
+    ' H', candle.high.toFixed(d),
+    ' L', candle.low.toFixed(d));
+
+  return
+
   if (macd > 0) {
     if (this.trend.direction != 'up') {
       var isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
