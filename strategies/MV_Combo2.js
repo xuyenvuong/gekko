@@ -63,13 +63,17 @@ method.check = function(candle) {
 
   var d = 4;
 
-  if (cs.isHammer({
+  log.debug('check start');
+
+  if (cs.isHammer(
+      {
         close: candle.close,
         open: candle.open,
         high: candle.high,
         low: candle.low
-    })) {
-    log.debug('Hammer ', candle);
+      }
+    )) {
+    log.debug('isHammer ', candle);
   }
 
   return
