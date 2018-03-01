@@ -62,10 +62,11 @@ method.check = function(candle) {
   var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
 
   var d = 4;
+  var isAdviced = false;
 
   if (macd > 0) {
     if (this.trend.direction != 'up') {
-      var isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
+      isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
       this.trend = {
         duration: 0,
@@ -109,7 +110,7 @@ method.check = function(candle) {
 
   } else if (macd < 0) {
     if (this.trend.direction != 'down') {
-      var isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
+      isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
       this.trend = {
         duration: 0,
@@ -123,7 +124,7 @@ method.check = function(candle) {
 
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ' : '', this.trend.duration, 'candle(s) -',
       ' macd ', macd > 0 ? ' ' : '', macd.toFixed(d), macdDiff > 0 ? ' ' : '', macdDiff.toFixed(d),
-      ' macd-signal ', macdSignal > 0 ? ' ' : '', macdSignal.toFixed(d),
+      ' macd-signal ', signal > 0 ? ' ' : '', signal.toFixed(d),
       ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ' : '', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
