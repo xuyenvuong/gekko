@@ -6,7 +6,7 @@
 
 var _ = require('lodash');
 var log = require('../core/log.js');
-const cs = require('candlestick');
+const cs = require('../core/candlestick.js');
 
 // let's create our own method
 var method = {};
