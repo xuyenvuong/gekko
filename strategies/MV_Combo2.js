@@ -93,12 +93,12 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if (this.trend.persisted && !this.trend.adviced) {
-      if (cs.isHangingMan(this.lastData.candle, candle)) {
+      if (this.lastData.candle && cs.isHangingMan(this.lastData.candle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
         this.lastData.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
-      } else if (cs.isShootingStar(this.lastData.candle, candle)) {
+      } else if (this.lastData.candle && cs.isShootingStar(this.lastData.candle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
         this.lastData.pl += candle.close;
