@@ -96,13 +96,13 @@ method.check = function(candle) {
       if (this.lastData.candle && cs.isHangingMan(this.lastData.candle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
-        this.lastData.pl += candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.pl);
       } else if (this.lastData.candle && cs.isShootingStar(this.lastData.candle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
-        this.lastData.pl += candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.lastData.pl);
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
       }
     } else {
       this.advice();
@@ -123,9 +123,11 @@ method.check = function(candle) {
     this.trend.duration++;
 
     log.debug('- Downtrend since', this.trend.duration < 10 ? ' ' : '', this.trend.duration, 'candle(s) -',
-      ' macd ', macd > 0 ? ' ' : '', macd.toFixed(d), macdDiff > 0 ? ' ' : '', macdDiff.toFixed(d),
-      ' macd-signal ', signal > 0 ? ' ' : '', signal.toFixed(d),
-      ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ' : '', emaDiff.toFixed(d),
+      ' macd ', macd > 0 ? ' ': '', macd.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
+      ' short ', macdShort > 0 ? ' ': '', macdShort.toFixed(d),
+      ' short ', macdLong > 0 ? ' ': '', macdLong.toFixed(d),
+      ' signal ', signal > 0 ? ' ': '', signal.toFixed(d),
+      ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
       ' H', candle.high.toFixed(d),
@@ -138,13 +140,13 @@ method.check = function(candle) {
       if (cs.isHammer(candle)) {
         this.advice('long');
         this.trend.adviced = true;
-        this.lastData.pl -= candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.lastData.pl);
+        this.pl -= candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl);
       } else if (cs.isInvertedHammer(candle)) {
         this.advice('long');
         this.trend.adviced = true;
-        this.lastData.pl -= candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.lastData.pl);
+        this.pl -= candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl);
       }
     } else {
       this.advice();
