@@ -74,6 +74,15 @@ method.check = function(candle) {
       }
     )) {
     log.debug('isHammer ', candle);
+  } else if (cs.isHangingMan(
+      {
+        close: candle.close,
+        open: candle.open,
+        high: candle.high,
+        low: candle.low
+      }
+    )) {
+    log.debug('isHangingMan ', candle);
   }
 
   return
