@@ -64,7 +64,7 @@ method.check = function(candle) {
   var d = 4;
   var isAdviced = false;
 
-  if (this.pl) {
+  if (!this.pl) {
     log.debug("Candle start:", candle.start);
   }
 
