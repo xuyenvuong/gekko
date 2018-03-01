@@ -6,6 +6,7 @@
 
 var _ = require('lodash');
 var log = require('../core/log.js');
+const cs = require('candlestick');
 
 // let's create our own method
 var method = {};
@@ -62,11 +63,14 @@ method.check = function(candle) {
 
   var d = 4;
 
-  log.debug('candle.date ', candle,
-    ' C', candle.close.toFixed(d),
-    ' O', candle.open.toFixed(d),
-    ' H', candle.high.toFixed(d),
-    ' L', candle.low.toFixed(d));
+  if (cs.isHammer({
+        close: candle.close,
+        open: candle.open,
+        high: candle.high,
+        low: candle.low
+    })) {
+    log.debug('Hammer ', candle);
+  }
 
   return
 
