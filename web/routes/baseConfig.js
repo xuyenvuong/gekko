@@ -14,14 +14,17 @@ config.debug = true;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 config.tradingAdvisor = {
+  enabled: true,
+  candleSize: 60,
+  historySize: 25
 }
 
 config.candleWriter = {
-  enabled: false
+  enabled: true
 }
 config.adviceWriter = {
-  enabled: false,
-  muteSoft: true,
+  enabled: true,
+  muteSoft: true
 }
 
 config.trader = {

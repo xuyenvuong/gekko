@@ -27,17 +27,21 @@ method.init = function() {
     ema: 0,
     emaDiff: 0,
     macd: 0,
+    macdShort: 0,
+    macdLong: 0,
     macdDiff: 0,
     signal: 0,
-    signalDiff: 0,
-    pl: 0
+    signalDiff: 0
   }
+
+  this.pl = 0;
 
   this.requiredHistory = this.tradingAdvisor.historySize;
 
   // define the indicators we need
   this.addIndicator('ema', 'EMA', this.settings.ema.weight);
   this.addIndicator('macd', 'MACD', this.settings.macd);
+  //this.addIndicator('rsi', 'RSI', this.settings.rsi);
 }
 
 
@@ -50,6 +54,8 @@ method.check = function(candle) {
   var ema = this.indicators.ema.result;
   var emaDiff = this.lastData.ema ? ema - this.lastData.ema : 0;
   var macd = this.indicators.macd.result;
+  var macdShort = this.indicators.macd.short;
+  var macdLong = this.indicators.macd.long;
   var macdDiff = this.lastData.macd ? macd - this.lastData.macd : 0;
   var signal = this.indicators.macd.signal.result;
   var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
@@ -72,7 +78,9 @@ method.check = function(candle) {
 
     log.debug(' +  Uptrend since', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
       ' macd ', macd > 0 ? ' ': '', macd.toFixed(d), macdDiff > 0 ? ' ': '', macdDiff.toFixed(d),
-      ' macd-signal ', macdSignal > 0 ? ' ': '', macdSignal.toFixed(d),
+      ' short ', macdShort > 0 ? ' ': '', macdShort.toFixed(d),
+      ' short ', macdLong > 0 ? ' ': '', macdLong.toFixed(d),
+      ' signal ', signal > 0 ? ' ': '', signal.toFixed(d),
       ' ema ', ema.toFixed(d), emaDiff > 0 ? ' ':'', emaDiff.toFixed(d),
       ' C', candle.close.toFixed(d),
       ' O', candle.open.toFixed(d),
@@ -125,6 +133,9 @@ method.check = function(candle) {
   this.lastData.ema = ema;
   this.lastData.emaDiff = emaDiff;
   this.lastData.macd = macd;
+  this.lastData.macdShort = macdShort;
+  this.lastData.macdLong = macdLong;
+  this.lastData.macdDiff = macdDiff;
   this.lastData.signal = signal;
   this.lastData.signalDiff = signalDiff;
 }
