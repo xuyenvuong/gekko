@@ -16,16 +16,24 @@ function bodyLen(candlestick) {
   return Math.abs(candlestick.open - candlestick.close);
 }
 
-function isDoji(candlestick) {
-  return bodyLen(candlestick) == 0; // TODO: Max Vuong check for long leg and small body length as well
+function noBodyLen(candlestick) {
+  return bodyLen(candlestick) == 0;
 }
 
 function wickLen(candlestick) {
   return candlestick.high - Math.max(candlestick.open, candlestick.close);
 }
 
+function noWickLen(candlestick) {
+  return candlestick.high - Math.max(candlestick.open, candlestick.close) == 0;
+}
+
 function tailLen(candlestick) {
   return Math.min(candlestick.open, candlestick.close) - candlestick.low;
+}
+
+function noTailLen(candlestick) {
+  return Math.min(candlestick.open, candlestick.close) - candlestick.low == 0;
 }
 
 function isBullish(candlestick) {
@@ -88,6 +96,10 @@ function findPattern(dataArray, callback) {
 // Boolean pattern detection.
 // @public
 
+function isDoji(candlestick) {
+  return noBodyLen(candlestick);
+}
+
 function isHammer(candlestick) {
   return isBullish(candlestick) &&
     isHammerLike(candlestick);
@@ -99,13 +111,15 @@ function isInvertedHammer(candlestick) {
 }
 
 function isDragonfly(candlestick) {
-  return isDoji(candlestick) &&
+  return noBodyLen(candlestick) &&
+    noWickLen(candlestick) &&
     isHammerLike(candlestick);
 }
 
 function isGravestone(candlestick) {
-  return isDoji(candlestick) &&
-  isInvertedHammerLike(candlestick);
+  return noBodyLen(candlestick) &&
+    noTailLen(candlestick) &&
+    isInvertedHammerLike(candlestick);
 }
 
 function isHangingMan(previous, current) {
@@ -161,6 +175,10 @@ function isBearishKicker(previous, current) {
 // Pattern detection in arrays.
 // @public
 
+function doji(dataArray) {
+  return findPattern(dataArray, isDoji);
+}
+
 function hammer(dataArray) {
   return findPattern(dataArray, isHammer);
 }
@@ -209,6 +227,7 @@ function bearishKicker(dataArray) {
   return findPattern(dataArray, isBearishKicker);
 }
 
+module.exports.isDoji = isDoji;
 module.exports.isHammer = isHammer;
 module.exports.isInvertedHammer = isInvertedHammer;
 module.exports.isDragonfly = isDragonfly;
@@ -222,6 +241,7 @@ module.exports.isBearishHarami = isBearishHarami;
 module.exports.isBullishKicker = isBullishKicker;
 module.exports.isBearishKicker = isBearishKicker;
 
+module.exports.doji = doji;
 module.exports.hammer = hammer;
 module.exports.invertedHammer = invertedHammer;
 module.exports.dragonfly = dragonfly;

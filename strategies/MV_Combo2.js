@@ -108,6 +108,12 @@ method.check = function(candle) {
         this.trend.adviced = true;
         this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
+      } else if (cs.isDoji(candle)) {
+        // TODO: Long-Legged Doji or cross or short wick, long wick
+        this.advice('short');
+        this.trend.adviced = true;
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isDoji ', candle.close.toFixed(d), 'pl:', this.pl);
       }
     } else {
       this.advice();
