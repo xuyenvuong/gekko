@@ -83,17 +83,9 @@ method.check = function(candle) {
 
   var blendedCandle = cs.blendCandles(tmpCandles);
 
-  if (cs.isBullish(blendedCandle))
+  if (cs.isBullish(blendedCandle)) {
     log.debug("++ blendedCandle: ", blendedCandle);
-  else if (cs.isBearish(blendedCandle))
-    log.debug(" --blendedCandle: ", blendedCandle);
-  else
-    log.debug("Doji: ", blendedCandle);
 
-  return;
-
-
-  if (macd > 0) {
     if (this.trend.direction != 'up') {
       isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
@@ -152,7 +144,9 @@ method.check = function(candle) {
       this.advice();
     }
 
-  } else if (macd < 0) {
+  } else if (cs.isBearish(blendedCandle)) {
+    log.debug(" --blendedCandle: ", blendedCandle);
+
     if (this.trend.direction != 'down') {
       isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
@@ -199,6 +193,8 @@ method.check = function(candle) {
       }
     } else {
       this.advice();
+
+      log.debug("Doji: ", blendedCandle);
     }
   }
 
