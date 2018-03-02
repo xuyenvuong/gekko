@@ -16,6 +16,10 @@ function bodyLen(candlestick) {
   return Math.abs(candlestick.open - candlestick.close);
 }
 
+function isDoji(candlestick) {
+  return bodyLen(candlestick) == 0; // TODO: Max Vuong check for long leg and small body length as well
+}
+
 function wickLen(candlestick) {
   return candlestick.high - Math.max(candlestick.open, candlestick.close);
 }
@@ -94,6 +98,16 @@ function isInvertedHammer(candlestick) {
     isInvertedHammerLike(candlestick);
 }
 
+function isDragonfly(candlestick) {
+  return isDoji(candlestick) &&
+    isHammerLike(candlestick);
+}
+
+function isGravestone(candlestick) {
+  return isDoji(candlestick) &&
+  isInvertedHammerLike(candlestick);
+}
+
 function isHangingMan(previous, current) {
   return isBullish(previous) &&
     isBearish(current) &&
@@ -155,6 +169,14 @@ function invertedHammer(dataArray) {
   return findPattern(dataArray, isInvertedHammer);
 }
 
+function gravestone(dataArray) {
+  return findPattern(dataArray, isGravestone);
+}
+
+function dragonfly(dataArray) {
+  return findPattern(dataArray, isDragonfly);
+}
+
 function hangingMan(dataArray) {
   return findPattern(dataArray, isShootingStar);
 }
@@ -189,6 +211,8 @@ function bearishKicker(dataArray) {
 
 module.exports.isHammer = isHammer;
 module.exports.isInvertedHammer = isInvertedHammer;
+module.exports.isDragonfly = isDragonfly;
+module.exports.isGravestone = isGravestone;
 module.exports.isHangingMan = isHangingMan;
 module.exports.isShootingStar = isShootingStar;
 module.exports.isBullishEngulfing = isBullishEngulfing;
@@ -200,6 +224,8 @@ module.exports.isBearishKicker = isBearishKicker;
 
 module.exports.hammer = hammer;
 module.exports.invertedHammer = invertedHammer;
+module.exports.dragonfly = dragonfly;
+module.exports.gravestone = gravestone;
 module.exports.hangingMan = hangingMan;
 module.exports.shootingStar = shootingStar;
 module.exports.bullishEngulfing = bullishEngulfing;

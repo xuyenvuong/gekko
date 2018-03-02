@@ -107,6 +107,8 @@ method.check = function(candle) {
         this.trend.adviced = true;
         this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
+      } else if (true) {
+
       }
     } else {
       this.advice();
@@ -146,6 +148,11 @@ method.check = function(candle) {
         this.trend.adviced = true;
         this.pl -= candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl);
+      } else if (cs.isGravestone(candle)) {
+        this.advice('long');
+        this.trend.adviced = true;
+        this.pl -= candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isGravestone', candle.close.toFixed(d), 'pl:', this.pl);
       } else if (cs.isInvertedHammer(candle)) {
         this.advice('long');
         this.trend.adviced = true;
