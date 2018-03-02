@@ -35,6 +35,9 @@ method.init = function() {
     signalDiff: 0
   }
 
+  this.candles = [];
+  this.candleHistorySize = 50; // TODO: param
+
   this.pl = 0;
 
   this.requiredHistory = this.tradingAdvisor.historySize;
@@ -63,6 +66,16 @@ method.check = function(candle) {
 
   var d = 4;
   var isAdviced = false;
+  var lastCandle = null;
+
+  if (!this.candles.length) {
+    this.candles.push(Object.assign({}, candle));
+    return;
+  } else {
+    lastCandle = this.candles[this.candles.length - 1];
+  }
+
+
 
   if (macd > 0) {
     if (this.trend.direction != 'up') {
@@ -93,7 +106,7 @@ method.check = function(candle) {
       this.trend.persisted = true;
 
     if (this.trend.persisted && !this.trend.adviced) {
-      if (this.lastData.candle && cs.isHangingMan(this.lastData.candle, candle)) {
+      if (cs.isHangingMan(lastCandle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
         this.pl += candle.close;
@@ -103,7 +116,7 @@ method.check = function(candle) {
         this.trend.adviced = true;
         this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isGravestone ', candle.close.toFixed(d), 'pl:', this.pl);
-      } else if (this.lastData.candle && cs.isShootingStar(this.lastData.candle, candle)) {
+      } else if (cs.isShootingStar(lastCandle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
         this.pl += candle.close;
@@ -173,8 +186,12 @@ method.check = function(candle) {
     }
   }
 
-  //this.lastData.candle = JSON.parse(JSON.stringify(candle));
-  this.lastData.candle = Object.assign({}, candle);
+  this.candles.push(Object.assign({}, candle));
+
+  if (this.candles.length == this.candleHistorySize) {
+    this.candles.shift();
+  }
+
   this.lastData.ema = ema;
   this.lastData.emaDiff = emaDiff;
   this.lastData.macd = macd;

@@ -18,7 +18,7 @@ function bodyLen(candlestick) {
   return Math.abs(candlestick.open - candlestick.close);
 }
 
-function dojiBodyLen(candlestick) {
+function isDojiBodyLen(candlestick) {
   return 100 * Math.min(candlestick.open, candlestick.close) / Math.max(candlestick.open, candlestick.close) >= MAX_DOJI_BODY_PERCENT;
 }
 
@@ -99,7 +99,7 @@ function findPattern(dataArray, callback) {
 // @public
 
 function isDoji(candlestick) {
-  return dojiBodyLen(candlestick);
+  return isDojiBodyLen(candlestick);
 }
 
 function isHammer(candlestick) {
@@ -113,13 +113,13 @@ function isInvertedHammer(candlestick) {
 }
 
 function isDragonfly(candlestick) {
-  return dojiBodyLen(candlestick) &&
+  return isDojiBodyLen(candlestick) &&
     noWickLen(candlestick) &&
     isHammerLike(candlestick);
 }
 
 function isGravestone(candlestick) {
-  return dojiBodyLen(candlestick) &&
+  return isDojiBodyLen(candlestick) &&
     noTailLen(candlestick) &&
     isInvertedHammerLike(candlestick);
 }
