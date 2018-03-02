@@ -75,7 +75,7 @@ method.check = function(candle) {
   var isAdviced = false;
   var trendDirection = 'none';
 
-  var blendedCandle = cs.blendCandles(_.takeRight(this.candles.splice, this.candleMinSize));
+  var blendedCandle = cs.blendCandles(_.takeRight(this.candles, this.candleMinSize));
 
   log.debug("blendedCandle: ", blendedCandle);
 
