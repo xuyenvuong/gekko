@@ -36,6 +36,7 @@ method.init = function() {
   }
 
   this.candles = [];
+  this.candleMinSize = 5; // TODO: param
   this.candleHistorySize = 50; // TODO: param
 
   this.pl = 0;
@@ -55,6 +56,12 @@ method.log = function(candle) {
 }
 
 method.check = function(candle) {
+  this.candles.push(Object.assign({}, candle));
+
+  if (this.candles.length < this.candleMinSize)
+    return
+
+  var lastCandle = lastCandle = this.candles[this.candles.length - 1];
   var ema = this.indicators.ema.result;
   var emaDiff = this.lastData.ema ? ema - this.lastData.ema : 0;
   var macd = this.indicators.macd.result;
@@ -66,15 +73,13 @@ method.check = function(candle) {
 
   var d = 4;
   var isAdviced = false;
-  var lastCandle = null;
+  var trendDirection = 'none';
 
-  if (!this.candles.length) {
-    this.candles.push(Object.assign({}, candle));
-    return;
-  } else {
-    lastCandle = this.candles[this.candles.length - 1];
-  }
+  var blendedCandle = cs.blendCandles(this.candles.splice(-this.candleMinSize))
 
+  log.debug("blendedCandle: ", blendedCandle);
+
+  return;
 
 
   if (macd > 0) {

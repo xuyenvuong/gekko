@@ -229,6 +229,28 @@ function bearishKicker(dataArray) {
   return findPattern(dataArray, isBearishKicker);
 }
 
+function blendTwoCandles(previous, current) {
+  return {
+    high: Math.max(previous.high, current.high),
+    low: Math.min(previous.low, current.low),
+    close: current.close,
+    open: previous.open
+  }
+}
+
+function blendCandles(dataArray) {
+  var candle = null;
+
+  if (dataArray.length)
+    candle = dataArray[0];
+
+  for (let i = 1; i < dataArray.length; i++) {
+    candle = blendTwoCandles(candle, dataArray[1]);
+  }
+
+  return candle;
+}
+
 module.exports.isDoji = isDoji;
 module.exports.isHammer = isHammer;
 module.exports.isInvertedHammer = isInvertedHammer;
@@ -256,3 +278,5 @@ module.exports.bullishHarami = bullishHarami;
 module.exports.bearishHarami = bearishHarami;
 module.exports.bullishKicker = bullishKicker;
 module.exports.bearishKicker = bearishKicker;
+module.exports.blendTwoCandles = blendTwoCandles;
+module.exports.blendCandles = blendCandles;
