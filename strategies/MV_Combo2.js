@@ -75,9 +75,20 @@ method.check = function(candle) {
   var isAdviced = false;
   var trendDirection = 'none';
 
-  var blendedCandle = cs.blendCandles(_.takeRight(this.candles, this.candleMinSize));
+  var tmpCandles = [];
 
-  log.debug("blendedCandle: ", blendedCandle);
+  for (let i = this.candles.length - this.candleMinSize; i < this.candles.length; i++) {
+    tmpCandles.push(this.candles[i]);
+  }
+
+  var blendedCandle = cs.blendCandles(tmpCandles);
+
+  if (cs.isBullish(blendedCandle))
+    log.debug("++ blendedCandle: ", blendedCandle);
+  else if (cs.isBearish(blendedCandle))
+    log.debug(" --blendedCandle: ", blendedCandle);
+  else
+    log.debug("Doji: ", blendedCandle);
 
   return;
 
