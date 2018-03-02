@@ -252,6 +252,9 @@ function blendCandles(dataArray) {
 }
 
 module.exports.isDoji = isDoji;
+module.exports.isBullish = isBullish;
+module.exports.isBearish = isBearish;
+
 module.exports.isHammer = isHammer;
 module.exports.isInvertedHammer = isInvertedHammer;
 module.exports.isDragonfly = isDragonfly;
