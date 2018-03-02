@@ -98,13 +98,16 @@ method.check = function(candle) {
         this.trend.adviced = true;
         this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.pl);
+      } else if (cs.isGravestone(candle)) {
+        this.advice('short');
+        this.trend.adviced = true;
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isGravestone ', candle.close.toFixed(d), 'pl:', this.pl);
       } else if (this.lastData.candle && cs.isShootingStar(this.lastData.candle, candle)) {
         this.advice('short');
         this.trend.adviced = true;
         this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
-      } else if (true) {
-
       }
     } else {
       this.advice();
