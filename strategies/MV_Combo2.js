@@ -123,11 +123,20 @@ method.check = function(candle) {
     this.pl -= candle.close;
     log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl);
   } else if (cs.isDoji(candle)) {
-    // TODO: Long-Legged Doji or cross or short wick, long wick
-    this.advice('short');
-    this.trend.adviced = true;
-    this.pl += candle.close;
-    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isDoji ', candle.close.toFixed(d), 'pl:', this.pl);
+
+        // TODO: Long-Legged Doji or cross or short wick, long wick
+
+    if (cs.isBullish(candle) && cs.isBearish(blendedCandle)) {
+      this.advice('short');
+      this.trend.adviced = true;
+      this.pl += candle.close;
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isDoji ', candle.close.toFixed(d), 'pl:', this.pl);
+    } else if (cs.isBearish(candle) && cs.isBearish(blendedCandle)) {
+      this.advice();
+      log.debug('  ======================== NO ACTION isDoji Bearish', candle.close.toFixed(d), 'pl:', this.pl);
+    } else {
+      // TODO: handle real doji
+    }
   } else {
     log.debug('  ======================== NO ACTION ', candle.close.toFixed(d), 'pl:', this.pl);
     this.advice();
