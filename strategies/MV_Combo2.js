@@ -128,6 +128,9 @@ method.check = function(candle) {
     this.trend.adviced = true;
     this.pl += candle.close;
     log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isDoji ', candle.close.toFixed(d), 'pl:', this.pl);
+  } else {
+    log.debug('  ======================== NO ACTION ', candle.close.toFixed(d), 'pl:', this.pl);
+    this.advice();
   }
 
   this.candles.push(candle);
