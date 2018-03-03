@@ -57,7 +57,7 @@ method.log = function(candle) {
 
 method.check = function(candle) {
 
-  log.debug('  ** Candle', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+  log.debug('** Candle', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
     ' C', candle.close.toFixed(d),
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
