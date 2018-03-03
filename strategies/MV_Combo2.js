@@ -21,9 +21,9 @@ method.init = function() {
     duration: 0,
     persisted: false,
     adviced: false
-  };
+  }
 
-  this.lastData = {
+  /*this.lastData = {
     candle: null,
     ema: 0,
     emaDiff: 0,
@@ -33,12 +33,13 @@ method.init = function() {
     macdDiff: 0,
     signal: 0,
     signalDiff: 0
-  }
+  }*/
 
   this.candles = [];
-  this.candleMinSize = 10; // TODO: param
+  this.candleMinSize = 1; // TODO: param
   this.candleHistorySize = 50; // TODO: param
 
+  this.lastAdvice = 'none';
   this.pl = 0;
 
   this.requiredHistory = this.tradingAdvisor.historySize;
@@ -57,7 +58,7 @@ method.log = function(candle) {
 
 method.check = function(candle) {
 
-  log.debug('** Candle', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+  log.debug('          ** Candle', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
     ' C', candle.close.toFixed(d),
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
@@ -90,7 +91,40 @@ method.check = function(candle) {
 
   var blendedCandle = cs.blendCandles(tmpCandles);
 
-  if (cs.isBearish(blendedCandle)) {
+  /*
+    Single patterns decision
+   */
+  if (this.lastAdvice != 'short') {
+    if (cs.isHangingMan(lastCandle, candle)) {
+      this.advice('short');
+      this.lastAdvice = 'short';
+      this.pl += candle.close;
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.pl);
+    } else if (cs.isShootingStar(lastCandle, candle)) {
+      this.advice('short');
+      this.lastAdvice = 'short';
+      this.pl += candle.close;
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
+    }
+  } else if (this.lastAdvice != 'long') {
+    if (cs.isHammer(candle)) {
+      this.advice('long');
+      this.lastAdvice = 'long';
+      this.pl -= candle.close;
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl);
+    } else if (cs.isInvertedHammer(candle)) {
+      this.advice('long');
+      this.lastAdvice = 'long';
+      this.pl -= candle.close;
+      log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl);
+    }
+  }
+
+  /*
+    Multiple candle decision
+   */
+
+  if (false && cs.isBearish(blendedCandle)) {
     if (cs.isHammer(candle)) {
       this.advice('long');
       this.trend.adviced = true;
@@ -112,7 +146,7 @@ method.check = function(candle) {
 
       log.debug('  ======================== NO ACTION isDoji Bullish');
     }
-  } else if (cs.isBullish(blendedCandle)) {
+  } else if (false && cs.isBullish(blendedCandle)) {
     if (cs.isHangingMan(lastCandle, candle)) {
       this.advice('short');
       this.trend.adviced = true;
@@ -150,7 +184,7 @@ method.check = function(candle) {
 
   } else {
     // Undecided
-    log.debug('  ======================== UNDECIDED');
+    //log.debug('  ======================== UNDECIDED');
   }
 
   this.candles.push(candle);
