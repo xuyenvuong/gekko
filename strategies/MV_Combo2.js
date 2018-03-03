@@ -107,7 +107,7 @@ method.check = function(candle) {
     this.trend.adviced = true;
     this.pl += candle.close;
     log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
-  } if (cs.isHammer(candle)) {
+  } else if (cs.isHammer(candle)) {
     this.advice('long');
     this.trend.adviced = true;
     this.pl -= candle.close;
@@ -124,10 +124,6 @@ method.check = function(candle) {
     log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl);
   } else if (cs.isDoji(candle)) {
     // TODO: Long-Legged Doji or cross or short wick, long wick
-
-    var dummy = 100 * Math.min(candle.open, candle.close) / Math.max(candle.open, candle.close);
-    log.debug('dummy: ', dummy);
-
     this.advice('short');
     this.trend.adviced = true;
     this.pl += candle.close;
