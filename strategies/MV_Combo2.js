@@ -62,9 +62,7 @@ method.check = function(candle) {
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
     ' L', candle.low.toFixed(d));
-
-  this.candles.push(Object.assign({}, candle));
-
+  
   if (this.candles.length < this.candleMinSize) {
     log.debug('  ======================== LOADING');
     this.candles.push(candle);
