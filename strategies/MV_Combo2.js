@@ -36,7 +36,7 @@ method.init = function() {
   }
 
   this.candles = [];
-  this.candleMinSize = 5; // TODO: param
+  this.candleMinSize = 1; // TODO: param
   this.candleHistorySize = 50; // TODO: param
 
   this.pl = 0;
@@ -44,8 +44,8 @@ method.init = function() {
   this.requiredHistory = this.tradingAdvisor.historySize;
 
   // define the indicators we need
-  this.addIndicator('ema', 'EMA', this.settings.ema.weight);
-  this.addIndicator('macd', 'MACD', this.settings.macd);
+  //this.addIndicator('ema', 'EMA', this.settings.ema.weight);
+  //this.addIndicator('macd', 'MACD', this.settings.macd);
   //this.addIndicator('rsi', 'RSI', this.settings.rsi);
 }
 
@@ -56,13 +56,22 @@ method.log = function(candle) {
 }
 
 method.check = function(candle) {
+
+  log.debug('  ** Candle', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+    ' C', candle.close.toFixed(d),
+    ' O', candle.open.toFixed(d),
+    ' H', candle.high.toFixed(d),
+    ' L', candle.low.toFixed(d));
+
   this.candles.push(Object.assign({}, candle));
 
-  if (this.candles.length < this.candleMinSize)
+  if (this.candles.length < this.candleMinSize) {
+    //this.candles.push(Object.assign({}, candle));
+    this.candles.push(candle);
     return
+  }
 
-  var lastCandle = lastCandle = this.candles[this.candles.length - 1];
-  var ema = this.indicators.ema.result;
+  /*var ema = this.indicators.ema.result;
   var emaDiff = this.lastData.ema ? ema - this.lastData.ema : 0;
   var macd = this.indicators.macd.result;
   var macdShort = this.indicators.macd.short.result;
@@ -70,10 +79,10 @@ method.check = function(candle) {
   var macdDiff = this.lastData.macd ? macd - this.lastData.macd : 0;
   var signal = this.indicators.macd.signal.result;
   var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
+  */
 
   var d = 4;
-  var isAdviced = false;
-  var trendDirection = 'none';
+  var lastCandle = this.candles[this.candles.length - 1];
 
   var tmpCandles = [];
 
@@ -83,17 +92,70 @@ method.check = function(candle) {
 
   var blendedCandle = cs.blendCandles(tmpCandles);
 
+  if (cs.isHangingMan(lastCandle, candle)) {
+    this.advice('short');
+    this.trend.adviced = true;
+    this.pl += candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.pl);
+  } else if (cs.isGravestone(candle)) {
+    this.advice('short');
+    this.trend.adviced = true;
+    this.pl += candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isGravestone ', candle.close.toFixed(d), 'pl:', this.pl);
+  } else if (cs.isShootingStar(lastCandle, candle)) {
+    this.advice('short');
+    this.trend.adviced = true;
+    this.pl += candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
+  } if (cs.isHammer(candle)) {
+    this.advice('long');
+    this.trend.adviced = true;
+    this.pl -= candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl);
+  } else if (cs.isGravestone(candle)) {
+    this.advice('long');
+    this.trend.adviced = true;
+    this.pl -= candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isGravestone', candle.close.toFixed(d), 'pl:', this.pl);
+  } else if (cs.isInvertedHammer(candle)) {
+    this.advice('long');
+    this.trend.adviced = true;
+    this.pl -= candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl);
+  } else if (cs.isDoji(candle)) {
+    // TODO: Long-Legged Doji or cross or short wick, long wick
+
+    var dummy = 100 * Math.min(candle.open, candle.close) / Math.max(candle.open, candle.close);
+    log.debug('dummy: ', dummy);
+
+    this.advice('short');
+    this.trend.adviced = true;
+    this.pl += candle.close;
+    log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isDoji ', candle.close.toFixed(d), 'pl:', this.pl);
+  }
+
+  this.candles.push(candle);
+
+  if (this.candles.length == this.candleHistorySize) {
+    this.candles.shift();
+  }
+
+  return;
+
+
+
+
+
+
   if (cs.isBullish(blendedCandle)) {
-    log.debug("++ blendedCandle: ", blendedCandle);
+    log.debug("++ BULL: ", blendedCandle);
 
     if (this.trend.direction != 'up') {
-      isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
-
       this.trend = {
         duration: 0,
         persisted: false,
         direction: 'up',
-        adviced: isAdviced
+        adviced: false
       };
     }
 
@@ -145,16 +207,17 @@ method.check = function(candle) {
     }
 
   } else if (cs.isBearish(blendedCandle)) {
-    log.debug(" --blendedCandle: ", blendedCandle);
+    log.debug("--BEAR: ", blendedCandle);
 
     if (this.trend.direction != 'down') {
-      isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
+      //isAdviced = !(this.trend.direction == 'none' || this.trend.adviced);
 
       this.trend = {
         duration: 0,
         persisted: false,
         direction: 'down',
-        adviced: isAdviced
+        //adviced: isAdviced
+        adviced: false
       };
     }
 
@@ -191,10 +254,11 @@ method.check = function(candle) {
         this.pl -= candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl);
       }
+    } else if (cs.isDoji(blendedCandle)) {
+      this.advice();
+      log.debug("Doji: ", blendedCandle);
     } else {
       this.advice();
-
-      log.debug("Doji: ", blendedCandle);
     }
   }
 
