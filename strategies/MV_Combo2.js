@@ -62,7 +62,7 @@ method.check = function(candle) {
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
     ' L', candle.low.toFixed(d));
-  
+
   if (this.candles.length < this.candleMinSize) {
     log.debug('  ======================== LOADING');
     this.candles.push(candle);
@@ -90,7 +90,7 @@ method.check = function(candle) {
 
   var blendedCandle = cs.blendCandles(tmpCandles);
 
-  if (cs.isBullish(blendedCandle)) {
+  if (cs.isBearish(blendedCandle)) {
     if (cs.isHammer(candle)) {
       this.advice('long');
       this.trend.adviced = true;
@@ -112,7 +112,7 @@ method.check = function(candle) {
 
       log.debug('  ======================== NO ACTION isDoji Bullish');
     }
-  } else if (cs.isBearish(blendedCandle)) {
+  } else if (cs.isBullish(blendedCandle)) {
     if (cs.isHangingMan(lastCandle, candle)) {
       this.advice('short');
       this.trend.adviced = true;
