@@ -87,6 +87,8 @@ method.check = function(candle) {
    */
   //this.addCandle(candle);
 
+  log.debug('  ======================== Age before:', this.age);
+
   this.candle[this.age] = Object.assign({}, candle);
   //this.candle[this.age] = candle;
   //this.updateSupportResistance();
@@ -99,6 +101,7 @@ method.check = function(candle) {
 
   this.age = (this.age + 1) % this.candleHistorySize;
 
+  log.debug('  ======================== Age after :', this.age);
 
   if (this.candles.length < this.candleMinSize) {
     log.debug('  ======================== LOADING', this.age);
@@ -283,11 +286,11 @@ method.getLastCandle = function() {
 
   return this.age > 1 ? this.candles[this.age - 2] : this.candles[this.candles.length + (this.age - 2)];
 }
-*/
+
 method.getTrendCandles = function() {
   return [];
 }
-
+*/
 /*
 method.updateSupportResistance = function () {
   if (this.age == this.supportIdx) {
