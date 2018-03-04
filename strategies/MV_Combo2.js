@@ -112,7 +112,7 @@ method.check = function(candle) {
 
   log.debug('  ======================== DONE LOADING');
 
-  var lastCandle = this.getLastCandle();
+  //var lastCandle = this.getLastCandle();
   //var shortBlendedCandle = cs.blendCandles(this.getTrendCandles());
 
 
@@ -267,18 +267,18 @@ method.check = function(candle) {
   this.lastData.signalDiff = signalDiff;
   */
 }
-/*
+
 method.addCandle = function(candle) {
-  this.candle[this.age] = Object.assign({}, candle);
+  this.candles[this.count] = Object.assign({}, candle);
   //this.updateSupportResistance();
 
   if (candle.close < this.supportPrice)
-    this.supportIdx = this.age;
+    this.supportIdx = this.count;
 
   if (candle.close > this.resistancePrice)
-    this.resistanceIdx = this.age;
+    this.resistanceIdx = this.count;
 
-  this.age = (this.age + 1) % this.candleHistorySize;
+  this.count = (this.count + 1) % this.candleHistorySize;
 }
 
 method.getLastCandle = function() {
@@ -291,7 +291,7 @@ method.getLastCandle = function() {
 method.getTrendCandles = function() {
   return [];
 }
-*/
+
 /*
 method.updateSupportResistance = function () {
   if (this.age == this.supportIdx) {
