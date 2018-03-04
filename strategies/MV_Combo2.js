@@ -263,7 +263,7 @@ method.addCandle = function(candle) {
 }
 
 method.getLastCandle = function() {
-  if (this.history.candles.length > 1)
+  if (this.history.candles.length < 2)
     return null;
 
   return this.history.currentIdx > 1 ? this.history.candles[this.history.currentIdx - 2] : this.history.candles[this.history.candles.length + (this.history.currentIdx - 2)];
