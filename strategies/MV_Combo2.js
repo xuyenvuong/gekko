@@ -37,7 +37,7 @@ method.init = function() {
   }*/
 
   this.candles = [];
-  this.age = 0;
+  this.count = 0;
 
   this.candleMinSize = 1; // TODO: param
   this.candleHistorySize = 100; // TODO: param
@@ -87,24 +87,24 @@ method.check = function(candle) {
    */
   //this.addCandle(candle);
 
-  log.debug('  ======================== Age before:', this.age);
+  log.debug('  ======================== count before:', this.count);
 
-  this.candle[this.age] = Object.assign({}, candle);
+  this.candle[this.count] = Object.assign({}, candle);
   //this.candle[this.age] = candle;
   //this.updateSupportResistance();
 
   if (candle.close < this.supportPrice)
-    this.supportIdx = this.age;
+    this.supportIdx = this.count;
 
   if (candle.close > this.resistancePrice)
-    this.resistanceIdx = this.age;
+    this.resistanceIdx = this.count;
 
-  //this.age = (this.age + 1) % this.candleHistorySize;
+  this.count = (this.count + 1) % this.candleHistorySize;
 
-  log.debug('  ======================== Age after :', this.age);
+  log.debug('  ======================== count after :', this.count);
 
   if (this.candles.length < this.candleMinSize) {
-    log.debug('  ======================== LOADING', this.age);
+    log.debug('  ======================== LOADING', this.count);
     return
   }
 
