@@ -39,8 +39,8 @@ method.init = function() {
   this.history = {
     candles: [],
     currentIdx: 0,
-    candleMinSize: this.settings.threshold.persistence || 1,
-    maxSize: 100 // TODO: param
+    candleMinSize: this.settings.thresholds.persistence || 1,
+    maxSize: this.settings.thresholds.maxSize || 100
   }
 
   this.resistanceIdx = -1;

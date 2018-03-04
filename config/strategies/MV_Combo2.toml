@@ -13,6 +13,7 @@ high = 70
 persistence = 1
 
 [thresholds]
-down = -0.025
-up = 0.025
+#down = -0.025
+#up = 0.025
 persistence = 1
+maxSize = 100
