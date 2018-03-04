@@ -92,6 +92,9 @@ method.check = function(candle) {
     return
   }
 
+
+  log.debug('  ======================== DONE LOADING');
+
   var lastCandle = this.getLastCandle();
   //var shortBlendedCandle = cs.blendCandles(this.getTrendCandles());
 
