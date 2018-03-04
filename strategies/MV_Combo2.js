@@ -101,7 +101,7 @@ method.check = function(candle) {
 
 
   if (this.candles.length < this.candleMinSize) {
-    log.debug('  ======================== LOADING');
+    log.debug('  ======================== LOADING', this.age);
     return
   }
 
