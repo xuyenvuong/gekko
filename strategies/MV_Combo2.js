@@ -89,7 +89,8 @@ method.check = function(candle) {
 
   log.debug('  ======================== count before:', this.count);
 
-  this.candle[this.count] = Object.assign({}, candle);
+  //this.candles[this.count] = Object.assign({}, candle);
+  this.candles[this.count] = candle;
   //this.candle[this.age] = candle;
   //this.updateSupportResistance();
 
