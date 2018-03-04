@@ -251,7 +251,7 @@ method.check = function(candle) {
   */
 }
 
-method.addCandle = function(candle) {
+method.prototype.addCandle = function(candle) {
   this.candle[this.age] = Object.assign({}, candle);
   //this.updateSupportResistance();
 
@@ -264,19 +264,19 @@ method.addCandle = function(candle) {
   this.age = (this.age + 1) % this.candleHistorySize;
 }
 
-method.getLastCandle = function() {
+method.prototype.getLastCandle = function() {
   if (this.candles.length > 1)
     return null;
 
   return this.age > 1 ? this.candles[this.age - 2] : this.candles[this.candles.length + (this.age - 2)];
 }
 
-method.getTrendCandles = function() {
+method.prototype.getTrendCandles = function() {
   return [];
 }
 
 /*
-method.updateSupportResistance = function () {
+method.prototype.updateSupportResistance = function () {
   if (this.age == this.supportIdx) {
     this.supportPrice = Infinity;
 
