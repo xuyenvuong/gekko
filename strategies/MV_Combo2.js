@@ -94,7 +94,6 @@ method.check = function(candle) {
   }
 
   var lastCandle = this.getLastCandle();
-  log.debug("getlastcandle", lastCandle);
   //var shortBlendedCandle = cs.blendCandles(this.getTrendCandles());
 
   //var tmpCandles = [];
