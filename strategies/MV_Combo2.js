@@ -99,7 +99,7 @@ method.check = function(candle) {
   if (candle.close > this.resistancePrice)
     this.resistanceIdx = this.age;
 
-  this.age = (this.age + 1) % this.candleHistorySize;
+  //this.age = (this.age + 1) % this.candleHistorySize;
 
   log.debug('  ======================== Age after :', this.age);
 
