@@ -252,7 +252,7 @@ method.check = function(candle) {
 }
 
 method.addCandle = function(candle) {
-  this.candle[this.age] = candle;
+  this.candle[this.age] = Object.assign({}, candle);
   //this.updateSupportResistance();
 
   if (candle.close < this.supportPrice)
