@@ -77,7 +77,7 @@ method.check = function(candle) {
    var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
    */
 
-  log.debug('          ** Candle', this.trend.duration < 10 ? ' ':'', this.trend.duration, 'candle(s) -',
+  log.debug('          ** Candle', this.history.currentIdx < 10 ? ' ':'', this.history.currentIdx, 'candle(s) -',
     ' C', candle.close.toFixed(d),
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
@@ -86,18 +86,15 @@ method.check = function(candle) {
   /*
    Add candle and update support/resistance indexes
    */
-  //this.addCandle(candle);
-
-  log.debug('  ======================== count before:', this.history.currentIdx);
-
   this.addCandle(candle);
 
   if (this.history.candles.length < this.history.candleMinSize) {
-    log.debug('  ======================== LOADING', this.history.currentIdx);
+    log.debug('  ======================== LOADING');
     return
   }
 
   var lastCandle = this.getLastCandle();
+  log.debug("getlastcandle", lastCandle);
   //var shortBlendedCandle = cs.blendCandles(this.getTrendCandles());
 
   //var tmpCandles = [];
