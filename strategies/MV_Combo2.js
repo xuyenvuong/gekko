@@ -85,7 +85,20 @@ method.check = function(candle) {
   /*
    Add candle and update support/resistance indexes
    */
-  this.addCandle(candle);
+  //this.addCandle(candle);
+
+  //this.candle[this.age] = Object.assign({}, candle);
+  this.candle[this.age] = candle;
+  //this.updateSupportResistance();
+
+  if (candle.close < this.supportPrice)
+    this.supportIdx = this.age;
+
+  if (candle.close > this.resistancePrice)
+    this.resistanceIdx = this.age;
+
+  this.age = (this.age + 1) % this.candleHistorySize;
+
 
   if (this.candles.length < this.candleMinSize) {
     log.debug('  ======================== LOADING');
@@ -250,8 +263,8 @@ method.check = function(candle) {
   this.lastData.signalDiff = signalDiff;
   */
 }
-
-method.prototype.addCandle = function(candle) {
+/*
+method.addCandle = function(candle) {
   this.candle[this.age] = Object.assign({}, candle);
   //this.updateSupportResistance();
 
@@ -264,19 +277,19 @@ method.prototype.addCandle = function(candle) {
   this.age = (this.age + 1) % this.candleHistorySize;
 }
 
-method.prototype.getLastCandle = function() {
+method.getLastCandle = function() {
   if (this.candles.length > 1)
     return null;
 
   return this.age > 1 ? this.candles[this.age - 2] : this.candles[this.candles.length + (this.age - 2)];
 }
-
-method.prototype.getTrendCandles = function() {
+*/
+method.getTrendCandles = function() {
   return [];
 }
 
 /*
-method.prototype.updateSupportResistance = function () {
+method.updateSupportResistance = function () {
   if (this.age == this.supportIdx) {
     this.supportPrice = Infinity;
 
