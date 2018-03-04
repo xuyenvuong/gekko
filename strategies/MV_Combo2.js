@@ -87,8 +87,8 @@ method.check = function(candle) {
    */
   //this.addCandle(candle);
 
-  //this.candle[this.age] = Object.assign({}, candle);
-  this.candle[this.age] = candle;
+  this.candle[this.age] = Object.assign({}, candle);
+  //this.candle[this.age] = candle;
   //this.updateSupportResistance();
 
   if (candle.close < this.supportPrice)
