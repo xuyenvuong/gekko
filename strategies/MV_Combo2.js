@@ -103,7 +103,7 @@ method.check = function(candle) {
   /*
    Engulf patterns
    */
-  if (!this.trend.adviced) {
+  if (!this.trend.adviced && lastCandle) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle)) {
         this.trend.lastAdvice = 'short';
@@ -124,7 +124,7 @@ method.check = function(candle) {
   /*
     Single candle patterns
    */
-  if (!this.trend.adviced) {
+  if (!this.trend.adviced && lastCandle) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isHangingMan(lastCandle, candle)) {
         this.trend.lastAdvice = 'short';
@@ -155,7 +155,7 @@ method.check = function(candle) {
   /*
     Multiple candle patterns
    */
-  if (!this.trend.adviced) {
+  if (!this.trend.adviced && lastCandle) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
         this.trend.lastAdvice = 'short';
@@ -176,7 +176,7 @@ method.check = function(candle) {
   /*
     Trend percentage check by duration
    */
-  if (!this.trend.adviced) {
+  if (!this.trend.adviced && lastCandle) {
     if (trendByDuration.length) {
       var b = cs.blendCandles(trendByDuration);
       log.debug("   -------- b", b, "length", trendByDuration.length);
