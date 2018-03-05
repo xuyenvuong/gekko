@@ -105,6 +105,11 @@ method.check = function(candle) {
         this.trend.adviced = true;
         this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl);
+      } else if (cs.isBearishLongTail(lastCandle, candle)) {
+        this.trend.lastAdvice = 'short';
+        this.trend.adviced = true;
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isBearishLongTail ', candle.close.toFixed(d), 'pl:', this.pl);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isHammer(candle)) {

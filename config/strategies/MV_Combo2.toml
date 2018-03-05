@@ -1,5 +1,5 @@
 [init]
-lastAdvice = long
+lastAdvice = 'long' # long|short
 maxSize = 100
 persistence = 1
 

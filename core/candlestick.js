@@ -124,6 +124,12 @@ function isGravestone(candlestick) {
     isInvertedHammerLike(candlestick);
 }
 
+function isBearishLongTail(previous, current) {
+  return isBullish(previous) &&
+      isBearish(current) &&
+      isHammerLike(current);
+}
+
 function isHangingMan(previous, current) {
   return isBullish(previous) &&
     isBearish(current) &&
@@ -197,6 +203,10 @@ function dragonfly(dataArray) {
   return findPattern(dataArray, isDragonfly);
 }
 
+function bearishLongTail(dataArray) {
+  return findPattern(dataArray, isBearishLongTail);
+}
+
 function hangingMan(dataArray) {
   return findPattern(dataArray, isShootingStar);
 }
@@ -259,6 +269,7 @@ module.exports.isHammer = isHammer;
 module.exports.isInvertedHammer = isInvertedHammer;
 module.exports.isDragonfly = isDragonfly;
 module.exports.isGravestone = isGravestone;
+module.exports.isBearishLongTail = isBearishLongTail;
 module.exports.isHangingMan = isHangingMan;
 module.exports.isShootingStar = isShootingStar;
 module.exports.isBullishEngulfing = isBullishEngulfing;
@@ -273,6 +284,7 @@ module.exports.hammer = hammer;
 module.exports.invertedHammer = invertedHammer;
 module.exports.dragonfly = dragonfly;
 module.exports.gravestone = gravestone;
+module.exports.bearishLongTail = bearishLongTail;
 module.exports.hangingMan = hangingMan;
 module.exports.shootingStar = shootingStar;
 module.exports.bullishEngulfing = bullishEngulfing;
