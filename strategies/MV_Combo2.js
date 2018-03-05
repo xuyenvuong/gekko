@@ -176,7 +176,6 @@ method.check = function(candle) {
    */
   if (this.trend.adviced) {
     this.advice(this.trend.lastAdvice);
-    this.trend.adviced = false;
     this.trend.duration = 0;
 
     /*if (this.trend.lastAdvice == 'long') {
@@ -192,7 +191,6 @@ method.check = function(candle) {
     Reinitialize trend
    */
   this.trend.adviced = false;
-  this.trend.duration = 0;
 
   return;
 
