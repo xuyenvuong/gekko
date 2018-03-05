@@ -157,7 +157,7 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (trendByDuration.length) {
       var b = cs.blendCandles(trendByDuration);
-      console.log("   -------- b", b);
+      log.debug("   -------- b", b, "length", trendByDuration.length);
 
       if (cs.isBullish(b)) {
         var p = (b.close - b.open) / b.open;
