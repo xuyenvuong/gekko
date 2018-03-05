@@ -94,6 +94,7 @@ method.check = function(candle) {
   }
 
   var lastCandle = this.getLastCandle();
+  var trendByDuration = this.getTrendByDuration();
   //var shortBlendedCandle = cs.blendCandles(this.getTrendCandles());
   //var blendedCandle = cs.blendCandles(tmpCandles);
 
@@ -135,14 +136,14 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isGravestone(candle) && cs.isBearish(lastCandle)) {
-        this.trend.lastAdvice = 'long';
+      if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
+        this.trend.lastAdvice = 'short';
         this.trend.adviced = true;
-        this.pl -= candle.close;
+        this.pl += candle.close;
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isGravestone #2', candle.close.toFixed(d), 'pl:', this.pl);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
+      if (cs.isGravestone(candle) && cs.isBearish(lastCandle)) {
         this.trend.lastAdvice = 'long';
         this.trend.adviced = true;
         this.pl -= candle.close;
@@ -152,10 +153,22 @@ method.check = function(candle) {
   }
 
   /*
-    Trend percentage check
+    Trend percentage check by duration
    */
   if (!this.trend.adviced) {
+    if (trendByDuration.length) {
+      var b = cs.blendCandles(trendByDuration);
 
+      if (cs.isBullish(b)) {
+        var p = (b.close - b.open) / b.open;
+        log.debug(' percent growth =', p);
+
+        this.trend.lastAdvice = 'short';
+        this.trend.adviced = true;
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Duration #1', candle.close.toFixed(d), 'pl:', this.pl);
+      }
+    }
   }
 
   /*
@@ -163,12 +176,14 @@ method.check = function(candle) {
    */
   if (this.trend.adviced) {
     this.advice(this.trend.lastAdvice);
+    this.trend.adviced = false;
+    this.trend.duration = 0;
 
-    if (this.trend.lastAdvice == 'long') {
+    /*if (this.trend.lastAdvice == 'long') {
       this.supportIdx = this.history.currentIdx == 0 ? this.history.currentIdx : this.history.candles.length - 1;
     } else if (this.trend.lastAdvice == 'short') {
       this.resistanceIdx = this.history.currentIdx == 0 ? this.history.currentIdx : this.history.candles.length - 1;
-    }
+    }*/
   } else {
     this.advice();
   }
@@ -212,14 +227,18 @@ method.getLastCandle = function() {
   return this.history.currentIdx > 1 ? this.history.candles[this.history.currentIdx - 2] : this.history.candles[this.history.candles.length + (this.history.currentIdx - 2)];
 }
 
-method.getTrendCandles = function() {
+method.getTrendByDuration = function() {
   var candles = [];
+  var index = this.history.currentIdx - this.trend.duration;
 
-  if (this.supportIdx < this.resistanceIdx) {
+  index = index < 0 ? this.history.candles.length + index : index;
 
+  while (index != this.history.currentIdx) {
+    candles.push(this.history.candles[index]);
+    index = (index + 1) % this.history.candles.length;
   }
 
-  return [];
+  return candles;
 }
 
 /*
