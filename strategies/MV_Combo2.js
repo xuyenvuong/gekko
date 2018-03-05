@@ -18,6 +18,7 @@ method.init = function() {
 
   this.trend = {
     direction: 'none',
+    candles: [],
     duration: 0,
     persisted: false,
     adviced: false,
@@ -87,9 +88,9 @@ method.check = function(candle) {
    Add candle and update support/resistance indexes
    */
   this.addCandle(candle);
-  this.trend.duration++;
+  this.addTrendCandle(candle);
 
-  log.debug("            currentIdx", this.history.currentIdx, "duration", this.trend.duration);
+  this.trend.duration++;
 
   if (this.history.candles.length < this.history.candleMinSize) {
     log.debug('  ======================== LOADING');
@@ -97,7 +98,7 @@ method.check = function(candle) {
   }
 
   var lastCandle = this.getLastCandle();
-  var trendByDuration = this.getTrendByDuration();
+  var trendByDuration = this.getTrendCandles();
 
   /*
     Single candle patterns
@@ -159,7 +160,7 @@ method.check = function(candle) {
       var b = cs.blendCandles(trendByDuration);
       log.debug("   -------- b", b, "length", trendByDuration.length);
 
-      if (cs.isBullish(b)) {
+      if (cs.isBullish(b)) { // TODO: compare with long term trend before making decision
         var p = 100 * (b.close - b.open) / b.open;
         log.debug(' percent growth =', p);
 
@@ -178,6 +179,7 @@ method.check = function(candle) {
    */
   if (this.trend.adviced) {
     this.advice(this.trend.lastAdvice);
+    this.trend.candles.splice(0, this.trend.candles.length);
     this.trend.duration = 0;
 
     /*if (this.trend.lastAdvice == 'long') {
@@ -207,6 +209,9 @@ method.check = function(candle) {
   */
 }
 
+/*
+ Long term trend
+ */
 method.addCandle = function(candle) {
   this.history.candles[this.history.currentIdx] = candle;
   //this.history.candles[this.history.currentIdx] = Object.assign({}, candle);
@@ -227,7 +232,19 @@ method.getLastCandle = function() {
   return this.history.currentIdx > 1 ? this.history.candles[this.history.currentIdx - 2] : this.history.candles[this.history.candles.length + (this.history.currentIdx - 2)];
 }
 
-method.getTrendByDuration = function() {
+/*
+  Trend operation
+ */
+method.addTrendCandle = function(candle) {
+  this.trend.candles.push(candle)
+}
+
+method.getTrendCandles = function() {
+  return this.trend.candles;
+}
+
+
+/*method.getTrendByDuration = function() {
   var candles = [];
   var index = this.history.currentIdx - this.trend.duration;
   index = index < 0 ? this.history.candles.length + index : index;
@@ -238,7 +255,7 @@ method.getTrendByDuration = function() {
   }
 
   return candles;
-}
+}*/
 
 /*
 method.updateSupportResistance = function () {
