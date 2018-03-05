@@ -163,7 +163,7 @@ method.check = function(candle) {
         var p = 100 * (b.close - b.open) / b.open;
         log.debug(' percent growth =', p);
 
-        if (p > 0.5) { // TODO: param
+        if (p > 0.45) { // TODO: param
           this.trend.lastAdvice = 'short';
           this.trend.adviced = true;
           this.pl += candle.close;
