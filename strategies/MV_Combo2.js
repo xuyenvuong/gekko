@@ -164,7 +164,7 @@ method.check = function(candle) {
         var p = 100 * (b.close - b.open) / b.open;
         log.debug(' percent growth =', p);
 
-        if (p > 0.45) { // TODO: param
+        if (p > 0.40) { // TODO: param or AI about this
           this.trend.lastAdvice = 'short';
           this.trend.adviced = true;
           this.pl += candle.close;
