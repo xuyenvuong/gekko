@@ -22,7 +22,7 @@ method.init = function() {
     duration: 0,
     persisted: false,
     adviced: false,
-    lastAdvice: 'long' // TODO: param
+    lastAdvice: this.settings.init.lastAdvice
   }
 
   /*this.lastData = {
@@ -40,8 +40,8 @@ method.init = function() {
   this.history = {
     candles: [],
     age: 0,
-    candleMinSize: this.settings.thresholds.persistence || 1,
-    maxSize: this.settings.thresholds.maxSize || 100
+    candleMinSize: this.settings.init.persistence || 1,
+    maxSize: this.settings.init.maxSize || 100
   }
 
   this.resistanceIdx = -1;

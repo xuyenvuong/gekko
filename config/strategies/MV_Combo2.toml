@@ -1,3 +1,12 @@
+[init]
+lastAdvice = long
+maxSize = 100
+persistence = 1
+
+[thresholds]
+#down = -0.025
+#up = 0.025
+
 [ema]
 weight = 10
 
@@ -11,9 +20,3 @@ interval = 14
 low = 30
 high = 70
 persistence = 1
-
-[thresholds]
-#down = -0.025
-#up = 0.025
-persistence = 1
-maxSize = 100
