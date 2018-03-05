@@ -87,13 +87,14 @@ method.check = function(candle) {
    Add candle and update support/resistance indexes
    */
   this.addCandle(candle);
+  this.trend.duration++;
+
+  log.debug("            currentIdx", this.history.currentIdx, "duration", this.trend.duration);
 
   if (this.history.candles.length < this.history.candleMinSize) {
     log.debug('  ======================== LOADING');
     return
   }
-
-  this.trend.duration++;
 
   var lastCandle = this.getLastCandle();
   var trendByDuration = this.getTrendByDuration();
@@ -232,7 +233,7 @@ method.getTrendByDuration = function() {
 
   index = index < 0 ? this.history.candles.length + index : index;
 
-  while (index != this.history.currentIdx) {
+  while (false && index != this.history.currentIdx) {
     candles.push(this.history.candles[index]);
     index = (index + 1) % this.history.candles.length;
   }
