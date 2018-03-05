@@ -101,6 +101,27 @@ method.check = function(candle) {
   var trendByDuration = this.getTrendCandles();
 
   /*
+   Engulf patterns
+   */
+  if (!this.trend.adviced) {
+    if (this.trend.lastAdvice == 'long') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.trend.lastAdvice = 'short';
+        this.trend.adviced = true;
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl);
+      }
+    } else if (this.trend.lastAdvice == 'short') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.trend.lastAdvice = 'long';
+        this.trend.adviced = true;
+        this.pl -= candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl);
+      }
+    }
+  }
+
+  /*
     Single candle patterns
    */
   if (!this.trend.adviced) {
@@ -179,8 +200,7 @@ method.check = function(candle) {
    */
   if (this.trend.adviced) {
     this.advice(this.trend.lastAdvice);
-    this.trend.candles.splice(0, this.trend.candles.length);
-    this.trend.duration = 0;
+    this.resetTrendCandles();
 
     /*if (this.trend.lastAdvice == 'long') {
       this.supportIdx = this.history.currentIdx == 0 ? this.history.currentIdx : this.history.candles.length - 1;
@@ -210,7 +230,7 @@ method.check = function(candle) {
 }
 
 /*
- Long term trend
+ Long term trend operations
  */
 method.addCandle = function(candle) {
   this.history.candles[this.history.currentIdx] = candle;
@@ -233,7 +253,7 @@ method.getLastCandle = function() {
 }
 
 /*
-  Trend operation
+  Short term trend operations
  */
 method.addTrendCandle = function(candle) {
   this.trend.candles.push(candle)
@@ -241,6 +261,11 @@ method.addTrendCandle = function(candle) {
 
 method.getTrendCandles = function() {
   return this.trend.candles;
+}
+
+method.resetTrendCandles = function() {
+  this.trend.candles.splice(0, this.trend.candles.length);
+  this.trend.duration = 0;
 }
 
 
