@@ -228,10 +228,9 @@ method.getLastCandle = function() {
 method.getTrendByDuration = function() {
   var candles = [];
   var index = this.history.currentIdx - this.trend.duration;
-
   index = index < 0 ? this.history.candles.length + index : index;
 
-  while (index != this.history.currentIdx) {
+  for (let i = 0; i < this.trend.duration; i++) {
     candles.push(this.history.candles[index]);
     index = (index + 1) % this.history.candles.length;
   }
