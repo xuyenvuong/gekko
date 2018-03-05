@@ -93,12 +93,10 @@ method.check = function(candle) {
     return
   }
 
+  this.trend.duration++;
+
   var lastCandle = this.getLastCandle();
   var trendByDuration = this.getTrendByDuration();
-  //var shortBlendedCandle = cs.blendCandles(this.getTrendCandles());
-  //var blendedCandle = cs.blendCandles(tmpCandles);
-
-  this.trend.duration++;
 
   /*
     Single candle patterns
@@ -158,6 +156,7 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (trendByDuration.length) {
       var b = cs.blendCandles(trendByDuration);
+      console.log("   -------- b", b);
 
       if (cs.isBullish(b)) {
         var p = (b.close - b.open) / b.open;
