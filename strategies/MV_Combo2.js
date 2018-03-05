@@ -231,7 +231,7 @@ method.getTrendByDuration = function() {
 
   index = index < 0 ? this.history.candles.length + index : index;
 
-  while (false && index != this.history.currentIdx) {
+  while (index != this.history.currentIdx) {
     candles.push(this.history.candles[index]);
     index = (index + 1) % this.history.candles.length;
   }
