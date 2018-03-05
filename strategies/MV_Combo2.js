@@ -22,7 +22,7 @@ method.init = function() {
     duration: 0,
     persisted: false,
     adviced: false,
-    lastAdvice: 'short' // TODO: param
+    lastAdvice: 'long' // TODO: param
   }
 
   /*this.lastData = {
@@ -67,16 +67,6 @@ method.log = function(candle) {
 
 method.check = function(candle) {
   var d = 4;
-
-  /*var ema = this.indicators.ema.result;
-   var emaDiff = this.lastData.ema ? ema - this.lastData.ema : 0;
-   var macd = this.indicators.macd.result;
-   var macdShort = this.indicators.macd.short.result;
-   var macdLong = this.indicators.macd.long.result;
-   var macdDiff = this.lastData.macd ? macd - this.lastData.macd : 0;
-   var signal = this.indicators.macd.signal.result;
-   var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
-   */
 
   log.debug('          ** Candle', this.history.age < 10 ? ' ':'', this.history.age, 'candle(s) -',
     ' C', candle.close.toFixed(d),
@@ -215,18 +205,6 @@ method.check = function(candle) {
     Reinitialize trend
    */
   this.trend.adviced = false;
-
-  return;
-
-  /*this.lastData.ema = ema;
-  this.lastData.emaDiff = emaDiff;
-  this.lastData.macd = macd;
-  this.lastData.macdShort = macdShort;
-  this.lastData.macdLong = macdLong;
-  this.lastData.macdDiff = macdDiff;
-  this.lastData.signal = signal;
-  this.lastData.signalDiff = signalDiff;
-  */
 }
 
 /*
@@ -299,5 +277,26 @@ method.updateSupportResistance = function () {
   }
 }
 */
+
+
+/*var ema = this.indicators.ema.result;
+ var emaDiff = this.lastData.ema ? ema - this.lastData.ema : 0;
+ var macd = this.indicators.macd.result;
+ var macdShort = this.indicators.macd.short.result;
+ var macdLong = this.indicators.macd.long.result;
+ var macdDiff = this.lastData.macd ? macd - this.lastData.macd : 0;
+ var signal = this.indicators.macd.signal.result;
+ var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
+ */
+
+/*this.lastData.ema = ema;
+ this.lastData.emaDiff = emaDiff;
+ this.lastData.macd = macd;
+ this.lastData.macdShort = macdShort;
+ this.lastData.macdLong = macdLong;
+ this.lastData.macdDiff = macdDiff;
+ this.lastData.signal = signal;
+ this.lastData.signalDiff = signalDiff;
+ */
 
 module.exports = method;
