@@ -160,13 +160,15 @@ method.check = function(candle) {
       log.debug("   -------- b", b, "length", trendByDuration.length);
 
       if (cs.isBullish(b)) {
-        var p = (b.close - b.open) / b.open;
+        var p = 100 * (b.close - b.open) / b.open;
         log.debug(' percent growth =', p);
 
-        this.trend.lastAdvice = 'short';
-        this.trend.adviced = true;
-        this.pl += candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Duration #1', candle.close.toFixed(d), 'pl:', this.pl);
+        if (p > 0.5) { // TODO: param
+          this.trend.lastAdvice = 'short';
+          this.trend.adviced = true;
+          this.pl += candle.close;
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Duration #1', candle.close.toFixed(d), 'pl:', this.pl);
+        }
       }
     }
   }
