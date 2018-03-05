@@ -39,7 +39,7 @@ method.init = function() {
 
   this.history = {
     candles: [],
-    currentIdx: 0,
+    age: 0,
     candleMinSize: this.settings.thresholds.persistence || 1,
     maxSize: this.settings.thresholds.maxSize || 100
   }
@@ -78,7 +78,7 @@ method.check = function(candle) {
    var signalDiff = this.lastData.signal ? signal - this.lastData.signal : 0;
    */
 
-  log.debug('          ** Candle', this.history.currentIdx < 10 ? ' ':'', this.history.currentIdx, 'candle(s) -',
+  log.debug('          ** Candle', this.history.age < 10 ? ' ':'', this.history.age, 'candle(s) -',
     ' C', candle.close.toFixed(d),
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
@@ -92,7 +92,7 @@ method.check = function(candle) {
 
   this.trend.duration++;
 
-  if (this.history.candles.length < this.history.candleMinSize) {
+  if (this.history.candles.length <= this.history.candleMinSize) {
     log.debug('  ======================== LOADING');
     return
   }
@@ -101,30 +101,9 @@ method.check = function(candle) {
   var trendByDuration = this.getTrendCandles();
 
   /*
-   Engulf patterns
-   */
-  if (!this.trend.adviced && lastCandle) {
-    if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
-        this.trend.lastAdvice = 'short';
-        this.trend.adviced = true;
-        this.pl += candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl);
-      }
-    } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
-        this.trend.lastAdvice = 'long';
-        this.trend.adviced = true;
-        this.pl -= candle.close;
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl);
-      }
-    }
-  }
-
-  /*
     Single candle patterns
    */
-  if (!this.trend.adviced && lastCandle) {
+  if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isHangingMan(lastCandle, candle)) {
         this.trend.lastAdvice = 'short';
@@ -153,9 +132,30 @@ method.check = function(candle) {
   }
 
   /*
+   Engulf patterns
+   */
+  if (!this.trend.adviced) {
+    if (this.trend.lastAdvice == 'long') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.trend.lastAdvice = 'short';
+        this.trend.adviced = true;
+        this.pl += candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl);
+      }
+    } else if (this.trend.lastAdvice == 'short') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.trend.lastAdvice = 'long';
+        this.trend.adviced = true;
+        this.pl -= candle.close;
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl);
+      }
+    }
+  }
+
+  /*
     Multiple candle patterns
    */
-  if (!this.trend.adviced && lastCandle) {
+  if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
         this.trend.lastAdvice = 'short';
@@ -176,7 +176,7 @@ method.check = function(candle) {
   /*
     Trend percentage check by duration
    */
-  if (!this.trend.adviced && lastCandle) {
+  if (!this.trend.adviced) {
     if (trendByDuration.length) {
       var b = cs.blendCandles(trendByDuration);
       log.debug("   -------- b", b, "length", trendByDuration.length);
@@ -203,9 +203,9 @@ method.check = function(candle) {
     this.resetTrendCandles();
 
     /*if (this.trend.lastAdvice == 'long') {
-      this.supportIdx = this.history.currentIdx == 0 ? this.history.currentIdx : this.history.candles.length - 1;
+      this.supportIdx = this.history.age == 0 ? this.history.age : this.history.candles.length - 1;
     } else if (this.trend.lastAdvice == 'short') {
-      this.resistanceIdx = this.history.currentIdx == 0 ? this.history.currentIdx : this.history.candles.length - 1;
+      this.resistanceIdx = this.history.age == 0 ? this.history.age : this.history.candles.length - 1;
     }*/
   } else {
     this.advice();
@@ -233,23 +233,23 @@ method.check = function(candle) {
  Long term trend operations
  */
 method.addCandle = function(candle) {
-  this.history.candles[this.history.currentIdx] = candle;
-  //this.history.candles[this.history.currentIdx] = Object.assign({}, candle);
+  this.history.candles[this.history.age] = candle;
+  //this.history.candles[this.history.age] = Object.assign({}, candle);
 
   if (candle.close < this.supportPrice)
-    this.supportIdx = this.history.currentIdx;
+    this.supportIdx = this.history.age;
 
   if (candle.close > this.resistancePrice)
-    this.resistanceIdx = this.history.currentIdx;
+    this.resistanceIdx = this.history.age;
 
-  this.history.currentIdx = (this.history.currentIdx + 1) % this.history.maxSize;
+  this.history.age = (this.history.age + 1) % this.history.maxSize;
 }
 
 method.getLastCandle = function() {
   if (this.history.candles.length < 2)
     return null;
 
-  return this.history.currentIdx > 1 ? this.history.candles[this.history.currentIdx - 2] : this.history.candles[this.history.candles.length + (this.history.currentIdx - 2)];
+  return this.history.age > 1 ? this.history.candles[this.history.age - 2] : this.history.candles[this.history.candles.length + (this.history.age - 2)];
 }
 
 /*
@@ -271,7 +271,7 @@ method.resetTrendCandles = function() {
 
 /*method.getTrendByDuration = function() {
   var candles = [];
-  var index = this.history.currentIdx - this.trend.duration;
+  var index = this.history.age - this.trend.duration;
   index = index < 0 ? this.history.candles.length + index : index;
 
   for (let i = 0; i < this.trend.duration; i++) {
@@ -284,17 +284,17 @@ method.resetTrendCandles = function() {
 
 /*
 method.updateSupportResistance = function () {
-  if (this.history.currentIdx == this.supportIdx) {
+  if (this.history.age == this.supportIdx) {
     this.supportPrice = Infinity;
 
     for (let i = 0; i < this.history.candles.length; i++) {
-      if (this.candle[this.history.currentIdx].close < this.supportPrice) {
+      if (this.candle[this.history.age].close < this.supportPrice) {
         this.supportIdx = i;
       }
     }
   }
 
-  if (this.history.currentIdx == this.resistanceIdx) {
+  if (this.history.age == this.resistanceIdx) {
 
   }
 }
