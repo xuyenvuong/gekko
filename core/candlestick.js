@@ -124,6 +124,18 @@ function isGravestone(candlestick) {
     isInvertedHammerLike(candlestick);
 }
 
+function isBullishMarubozu(candlestick) {
+  return isBullish(candlestick) &&
+    noWickLen(candlestick) &&
+    noTailLen(candlestick);
+}
+
+function isBearishMarubozu(candlestick) {
+  return isBearish(candlestick) &&
+    noWickLen(candlestick) &&
+    noTailLen(candlestick);
+}
+
 function isBearishLongTail(previous, current) {
   return isBullish(previous) &&
       isBearish(current) &&
@@ -199,6 +211,14 @@ function gravestone(dataArray) {
   return findPattern(dataArray, isGravestone);
 }
 
+function bullishMarubozu(dataArray) {
+  return findPattern(dataArray, isBullishMarubozu);
+}
+
+function bearishMarubozu(dataArray) {
+  return findPattern(dataArray, isBearishMarubozu);
+}
+
 function dragonfly(dataArray) {
   return findPattern(dataArray, isDragonfly);
 }
@@ -269,6 +289,8 @@ module.exports.isHammer = isHammer;
 module.exports.isInvertedHammer = isInvertedHammer;
 module.exports.isDragonfly = isDragonfly;
 module.exports.isGravestone = isGravestone;
+module.exports.isBullishMarubozu = isBullishMarubozu;
+module.exports.isBearishMarubozu = isBearishMarubozu;
 module.exports.isBearishLongTail = isBearishLongTail;
 module.exports.isHangingMan = isHangingMan;
 module.exports.isShootingStar = isShootingStar;
@@ -284,6 +306,8 @@ module.exports.hammer = hammer;
 module.exports.invertedHammer = invertedHammer;
 module.exports.dragonfly = dragonfly;
 module.exports.gravestone = gravestone;
+module.exports.bullishMarubozu = bullishMarubozu;
+module.exports.bearishMarubozu = bearishMarubozu;
 module.exports.bearishLongTail = bearishLongTail;
 module.exports.hangingMan = hangingMan;
 module.exports.shootingStar = shootingStar;
