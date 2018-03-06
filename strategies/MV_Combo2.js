@@ -119,7 +119,7 @@ method.check = function(candle) {
   /*
    Engulf patterns
    */
-  if (!this.trend.adviced) {
+  /*if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle)) {
         this.setTrend('short', true);
@@ -131,12 +131,12 @@ method.check = function(candle) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
-  }
+  }*/
 
   /*
     Multiple candle patterns
    */
-  /*if (!this.trend.adviced) {
+  if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
         this.setTrend('short', true);
@@ -148,7 +148,7 @@ method.check = function(candle) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isGravestone #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
-  }*/
+  }
 
   /*
     Trend percentage check by duration
