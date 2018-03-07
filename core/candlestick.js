@@ -275,7 +275,7 @@ function blendCandles(dataArray) {
     candle = dataArray[0];
 
   for (let i = 1; i < dataArray.length; i++) {
-    candle = blendTwoCandles(candle, dataArray[1]);
+    candle = blendTwoCandles(candle, dataArray[i]);
   }
 
   return candle;
