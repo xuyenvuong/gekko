@@ -184,6 +184,7 @@ method.check = function(candle) {
       if (cs.isBullish(b)) {
         if (p > 0.5) {               // TODO: param or AI about this
           this.setTrendSignal(cs.isBearish, cs.isBullish, 'short', 1);
+        }
       } else if (cs.isBearish(b)) {
         if (p >= 0.5) {               // TODO: param or AI about this
           this.setTrendSignal(cs.isBullish, cs.isBullish, 'long', 1);
