@@ -30,7 +30,8 @@ method.init = function() {
       hold: false,
       until: null,
       confirm: null,
-      persistence: 0
+      persistence: 0,
+      action: null
     }
   }
 
@@ -84,45 +85,23 @@ method.check = function(candle) {
    */
   if (this.trend.signal.hold) {
     if (!this.trend.signal.until) {
-      //this.trend.signal.persistence--; // TODO:
+      this.trend.signal.persistence--;
 
-      //if (this.trend.signal.persistence < 0) {
-
-      //}
-
-      /*if (this.trend.signal.confirm == 'up') {
-        if (cs.isBullish(candle)) {
-          if (this.trend.lastAdvice == 'long') {
-
-          } else if (this.trend.lastAdvice == 'short') {
-
-          }
-        } else {
-
+      if (this.trend.signal.persistence < 0) {
+        if (this.trend.signal.confirm(candle)) {
+          this.setTrend(this.trend.signal.action, false);
+          this.resetTrendSignal();
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
         }
-      } else if (this.trend.signal.confirm == 'down') {
-        if (cs.isBearish(candle)) {
-          if (this.trend.lastAdvice == 'long') {
-
-          } else if (this.trend.lastAdvice == 'short') {
-
-          }
-        } else {
-
-        }
-      }*/
-
-      //this.resetTrendSignal();
+      } else {
+        this.resetTrendSignal();
+      }
     }
 
-    if (this.trend.signal.until(candle)) {
+    if (this.trend.signal.until && this.trend.signal.until(candle)) {
       this.trend.signal.until = null;
       log.debug("Until is executed");
     }
-
-    /*if (this.trend.signal.until == 'up' && cs.isBullish(candle) || (this.trend.signal.until == 'down' && cs.isBearish(candle))) {
-      this.trend.signal.until = null;
-    }*/
   }
 
   /*
@@ -171,7 +150,7 @@ method.check = function(candle) {
   /*
    Engulf patterns
    */
-  /*if (!this.trend.adviced) {
+  if (!this.trend.adviced && !this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle)) {
         this.setTrend('short', true);
@@ -183,12 +162,12 @@ method.check = function(candle) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
-  }*/
+  }
 
   /*
     Trend percentage check by duration
    */
-  if (!this.trend.adviced) {
+  if (!this.trend.adviced && !this.trend.signal.hold) {
     var trendByDuration = this.getTrendCandles();
 
     if (trendByDuration.length) {
@@ -205,7 +184,7 @@ method.check = function(candle) {
         }
       } else if (cs.isBearish(b)) {
         if (p >= 1.0) {               // TODO: param or AI about this
-          this.setTrendSignal(true, cs.isBullish, cs.isBearish, 1);
+          this.setTrendSignal(cs.isBullish, cs.isBullish, 'long', 1);
         }
       }
     }
@@ -268,10 +247,11 @@ method.resetTrend = function() {
   this.trend.adviced = false;
 }
 
-method.setTrendSignal = function(hold, on, confirm, persistence) {
-  this.trend.signal.hold = hold;
+method.setTrendSignal = function(on, confirm, action, persistence) {
+  this.trend.signal.hold = true;
   this.trend.signal.until = on;
   this.trend.signal.confirm = confirm;
+  this.trend.signal.action = action;
   this.trend.signal.persistence = persistence;
 }
 
