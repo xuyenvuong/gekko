@@ -25,20 +25,14 @@ method.init = function() {
     persisted: false,
     adviced: false,
     lastAdvice: this.settings.init.lastAdvice,
-    preservedCandle: false
+    preservedCandle: false,
+    signal: {
+      hold: false,
+      until: null,
+      confirm: null,
+      persistence: 0
+    }
   }
-
-  /*this.lastData = {
-    candle: null,
-    ema: 0,
-    emaDiff: 0,
-    macd: 0,
-    macdShort: 0,
-    macdLong: 0,
-    macdDiff: 0,
-    signal: 0,
-    signalDiff: 0
-  }*/
 
   this.history = {
     candles: [],
@@ -54,12 +48,7 @@ method.init = function() {
 
   this.pl = 0;
 
-  this.requiredHistory = this.tradingAdvisor.historySize;
-
-  // define the indicators we need
-  //this.addIndicator('ema', 'EMA', this.settings.ema.weight);
-  //this.addIndicator('macd', 'MACD', this.settings.macd);
-  //this.addIndicator('rsi', 'RSI', this.settings.rsi);
+  //this.requiredHistory = this.tradingAdvisor.historySize;
 }
 
 
@@ -91,6 +80,52 @@ method.check = function(candle) {
   var lastCandle = this.getLastCandle();
 
   /*
+   Signal & Confirm signal
+   */
+  if (this.trend.signal.hold) {
+    if (!this.trend.signal.until) {
+      //this.trend.signal.persistence--; // TODO:
+
+      //if (this.trend.signal.persistence < 0) {
+
+      //}
+
+      /*if (this.trend.signal.confirm == 'up') {
+        if (cs.isBullish(candle)) {
+          if (this.trend.lastAdvice == 'long') {
+
+          } else if (this.trend.lastAdvice == 'short') {
+
+          }
+        } else {
+
+        }
+      } else if (this.trend.signal.confirm == 'down') {
+        if (cs.isBearish(candle)) {
+          if (this.trend.lastAdvice == 'long') {
+
+          } else if (this.trend.lastAdvice == 'short') {
+
+          }
+        } else {
+
+        }
+      }*/
+
+      //this.resetTrendSignal();
+    }
+
+    if (this.trend.signal.until(candle)) {
+      this.trend.signal.until = null;
+      log.debug("Until is executed");
+    }
+
+    /*if (this.trend.signal.until == 'up' && cs.isBullish(candle) || (this.trend.signal.until == 'down' && cs.isBearish(candle))) {
+      this.trend.signal.until = null;
+    }*/
+  }
+
+  /*
     Single candle patterns
    */
   if (!this.trend.adviced) {
@@ -117,23 +152,6 @@ method.check = function(candle) {
   }
 
   /*
-   Engulf patterns
-   */
-  /*if (!this.trend.adviced) {
-    if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
-        this.setTrend('short', true);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      }
-    } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
-        this.setTrend('long', true);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      }
-    }
-  }*/
-
-  /*
     Multiple candle patterns
    */
   if (!this.trend.adviced) {
@@ -151,6 +169,23 @@ method.check = function(candle) {
   }
 
   /*
+   Engulf patterns
+   */
+  /*if (!this.trend.adviced) {
+    if (this.trend.lastAdvice == 'long') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.setTrend('short', true);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      }
+    } else if (this.trend.lastAdvice == 'short') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.setTrend('long', true);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+      }
+    }
+  }*/
+
+  /*
     Trend percentage check by duration
    */
   if (!this.trend.adviced) {
@@ -158,20 +193,20 @@ method.check = function(candle) {
 
     if (trendByDuration.length) {
       var b = cs.blendCandles(trendByDuration);
+      var p = cs.calculateBodyPercentage(b);
 
-      log.debug("   -------- b", b, "length", trendByDuration.length);
+      log.debug("   -------- b", b, "length", trendByDuration.length, 'percent growth', p);
 
-      if (cs.isBullish(b)) { // TODO: compare with long term trend before making decision
-        var p = 100 * (b.close - b.open) / b.open;
-        log.debug(' percent growth =', p);
-
-        if (p > 0.40) { // TODO: param or AI about this
+      if (cs.isBullish(b)) {
+        if (p > 0.40) {               // TODO: param or AI about this
         //if (this.resistanceIdx) {
-          this.setTrend('short', true);
-          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Duration #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+          //this.setTrend('short', true);
+          //log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Duration #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
         }
       } else if (cs.isBearish(b)) {
-
+        if (p >= 1.0) {               // TODO: param or AI about this
+          this.setTrendSignal(true, cs.isBullish, cs.isBearish, 1);
+        }
       }
     }
   }
@@ -233,6 +268,16 @@ method.resetTrend = function() {
   this.trend.adviced = false;
 }
 
+method.setTrendSignal = function(hold, on, confirm, persistence) {
+  this.trend.signal.hold = hold;
+  this.trend.signal.until = on;
+  this.trend.signal.confirm = confirm;
+  this.trend.signal.persistence = persistence;
+}
+
+method.resetTrendSignal = function() {
+  this.trend.signal.hold = false;
+}
 
 /*method.getTrendByDuration = function() {
   var candles = [];
@@ -264,6 +309,26 @@ method.updateSupportResistance = function () {
   }
 }
 */
+
+
+
+
+// define the indicators we need
+//this.addIndicator('ema', 'EMA', this.settings.ema.weight);
+//this.addIndicator('macd', 'MACD', this.settings.macd);
+//this.addIndicator('rsi', 'RSI', this.settings.rsi);
+
+/*this.lastData = {
+ candle: null,
+ ema: 0,
+ emaDiff: 0,
+ macd: 0,
+ macdShort: 0,
+ macdLong: 0,
+ macdDiff: 0,
+ signal: 0,
+ signalDiff: 0
+ }*/
 
 
 /*var ema = this.indicators.ema.result;

@@ -281,6 +281,10 @@ function blendCandles(dataArray) {
   return candle;
 }
 
+function calculateBodyPercentage(candlestick) {
+  return 100 * Math.abs(candlestick.close - candlestick.open) / Math.min(candlestick.close, candlestick.open);
+}
+
 module.exports.isDoji = isDoji;
 module.exports.isBullish = isBullish;
 module.exports.isBearish = isBearish;
