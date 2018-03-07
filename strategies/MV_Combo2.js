@@ -195,7 +195,7 @@ method.check = function(candle) {
       var b = cs.blendCandles(trendByDuration);
       var p = cs.calculateBodyPercentage(b);
 
-      log.debug("   -------- b", b, "length", trendByDuration.length, 'percent growth', p);
+      log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
       if (cs.isBullish(b)) {
         if (p > 0.40) {               // TODO: param or AI about this
