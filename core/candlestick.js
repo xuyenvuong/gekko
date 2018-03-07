@@ -323,3 +323,4 @@ module.exports.bullishKicker = bullishKicker;
 module.exports.bearishKicker = bearishKicker;
 module.exports.blendTwoCandles = blendTwoCandles;
 module.exports.blendCandles = blendCandles;
+module.exports.calculateBodyPercentage = calculateBodyPercentage;
