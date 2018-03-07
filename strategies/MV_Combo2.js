@@ -196,11 +196,11 @@ method.check = function(candle) {
       log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
       if (cs.isBullish(b)) {
-        if (p > 0.15 * this.trend.duration) {               // TODO: param or AI about this
+        if (p > 0.2 * this.trend.duration) {               // TODO: param or AI about this
           this.setTrendSignal(cs.isBearish, cs.isBullish, 'short', 1);
         }
       } else if (cs.isBearish(b)) {
-        if (p >= 0.15 * this.trend.duration) {               // TODO: param or AI about this
+        if (p >= 0.2 * this.trend.duration) {               // TODO: param or AI about this
           this.setTrendSignal(cs.isBullish, cs.isBullish, 'long', 1);
         }
       }
@@ -213,9 +213,8 @@ method.check = function(candle) {
   if (this.trend.adviced) {
     this.advice(this.trend.lastAdvice);
     this.resetTrend();
-  } else {
+  } else
     this.advice();
-  }
 }
 
 /*
