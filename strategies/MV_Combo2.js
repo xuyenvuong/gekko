@@ -85,15 +85,20 @@ method.check = function(candle) {
    */
   if (this.trend.signal.hold) {
     if (!this.trend.signal.until) {
-      this.trend.signal.persistence--;
-
-      if (this.trend.signal.persistence < 0) {
+      if (this.trend.signal.persistence > 0) {
         if (this.trend.signal.confirm(candle)) {
           this.setTrend(this.trend.signal.action, false);
           this.resetTrendSignal();
-          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by Signal ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+
+          if (this.trend.signal.action == 'long') {
+            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY signal', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+          } else {
+            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL signal', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+          }
         }
-      } else {
+
+        this.trend.signal.persistence--;
+      } else if (this.trend.signal.persistence <= 0) {
         this.resetTrendSignal();
       }
     }
