@@ -182,13 +182,10 @@ method.check = function(candle) {
       log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
       if (cs.isBullish(b)) {
-        if (p > 0.40) {               // TODO: param or AI about this
-        //if (this.resistanceIdx) {
-          //this.setTrend('short', true);
-          //log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Duration #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-        }
+        if (p > 0.5) {               // TODO: param or AI about this
+          this.setTrendSignal(cs.isBearish, cs.isBullish, 'short', 1);
       } else if (cs.isBearish(b)) {
-        if (p >= 1.0) {               // TODO: param or AI about this
+        if (p >= 0.5) {               // TODO: param or AI about this
           this.setTrendSignal(cs.isBullish, cs.isBullish, 'long', 1);
         }
       }
