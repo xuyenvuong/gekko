@@ -314,6 +314,7 @@ method.resetTrend = function() {
 }
 
 method.setTrendSignal = function(wait, confirm, until) {
+  log.debug('  ======== TREND SET ==================');
   this.trend.signal.hold = true;
   this.trend.signal.state = 'wait';
   this.trend.signal.wait = wait;
@@ -322,6 +323,7 @@ method.setTrendSignal = function(wait, confirm, until) {
 }
 
 method.resetTrendSignal = function() {
+  log.debug('  ======== TREND RESET ==================');
   this.trend.signal.hold = false;
 }
 
