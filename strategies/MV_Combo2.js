@@ -183,14 +183,20 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
+      if (cs.isBearishHarami(lastCandle, candle) && cs.isBearish(b)) {
         this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isBullish(b)) {
+        this.setTrend('short', 1);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBullishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
+      if (cs.isBearishHarami(lastCandle, candle) && cs.isBullish(b)) {
         this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isBearish(b)) {
+        this.setTrend('long', 1);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
   }
@@ -199,42 +205,37 @@ method.check = function(candle) {
     Trend percentage check by duration
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
-    //if (trendByDuration.length) {
-      //var b = cs.blendCandles(trendByDuration);
-      //var p = cs.calculateBodyPercentage(b);
+    log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
-      log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
-
-      if (cs.isBullish(b)) {
-        if (p >= 0.5) {               // TODO: param or AI about this
-          this.setTrendSignal({
-            on: cs.isBearish,
-            do: 'confirm'
-          }, {
-            on: cs.isBearish,
-            do: 'short',
-            keep: 2
-          }, {
-            wait: 1,
-            do: 'hold'
-          });
-        }
-      } else if (cs.isBearish(b)) {
-        if (p >= 0.5) {               // TODO: param or AI about this
-          this.setTrendSignal({
-            on: cs.isBullish,
-            do: 'confirm'
-          }, {
-            on: cs.isBullish,
-            do: 'long',
-            keep: 2
-          }, {
-            wait: 1,
-            do: 'hold'
-          });
-        }
+    if (cs.isBullish(b)) {
+      if (p >= 0.5) {               // TODO: param or AI about this
+        this.setTrendSignal({
+          on: cs.isBearish,
+          do: 'confirm'
+        }, {
+          on: cs.isBearish,
+          do: 'short',
+          keep: 2
+        }, {
+          wait: 1,
+          do: 'hold'
+        });
       }
-    //}
+    } else if (cs.isBearish(b)) {
+      if (p >= 0.5) {               // TODO: param or AI about this
+        this.setTrendSignal({
+          on: cs.isBullish,
+          do: 'confirm'
+        }, {
+          on: cs.isBullish,
+          do: 'long',
+          keep: 2
+        }, {
+          wait: 1,
+          do: 'hold'
+        });
+      }
+    }
   }
 
   /*
