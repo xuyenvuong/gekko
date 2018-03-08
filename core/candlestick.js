@@ -269,6 +269,24 @@ function bearishKicker(dataArray) {
   return findPattern(dataArray, isBearishKicker);
 }
 
+function isAllBullish(dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    if (isBearish(dataArray[i]))
+      return false;
+  }
+
+  return true;
+}
+
+function isAllBearish(dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    if (isBullish(dataArray[i]))
+      return false;
+  }
+
+  return true;
+}
+
 function blendTwoCandles(previous, current) {
   return {
     high: Math.max(previous.high, current.high),
@@ -314,6 +332,8 @@ module.exports.isBullishHarami = isBullishHarami;
 module.exports.isBearishHarami = isBearishHarami;
 module.exports.isBullishKicker = isBullishKicker;
 module.exports.isBearishKicker = isBearishKicker;
+module.exports.isAllBullish = isAllBullish;
+module.exports.isAllBearish = isAllBearish;
 
 module.exports.doji = doji;
 module.exports.hammer = hammer;
