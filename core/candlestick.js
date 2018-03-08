@@ -56,6 +56,16 @@ function isInvertedHammerLike(candlestick) {
     tailLen(candlestick) < bodyLen(candlestick);
 }
 
+function isLongWickLike(candlestick) {
+  return wickLen(candlestick) > (bodyLen(candlestick) * 3) &&
+    tailLen(candlestick) < bodyLen(candlestick);
+}
+
+function isLongTailLike(candlestick) {
+  return tailLen(candlestick) > (bodyLen(candlestick) * 3) &&
+    wickLen(candlestick) < bodyLen(candlestick);
+}
+
 function isEngulfed(shortest, longest) {
   return bodyLen(shortest) < bodyLen(longest);
 }
@@ -138,8 +148,8 @@ function isBearishMarubozu(candlestick) {
 
 function isBearishLongTail(previous, current) {
   return isBullish(previous) &&
-      isBearish(current) &&
-      isHammerLike(current);
+    isBearish(current) &&
+    isLongTailLike(current);
 }
 
 function isHangingMan(previous, current) {

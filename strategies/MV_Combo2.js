@@ -222,7 +222,6 @@ method.check = function(candle) {
  */
 method.addCandle = function(candle) {
   this.history.candles[this.history.age] = candle;
-  //this.history.candles[this.history.age] = Object.assign({}, candle);
 
   if (candle.close < this.supportPrice)
     this.supportIdx = this.history.age;
