@@ -125,21 +125,21 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isHangingMan(lastCandle, candle)) {
-        this.setTrend('short', 1);
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isShootingStar(lastCandle, candle)) {
-        this.setTrend('short', 1);
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isBearishLongTail(lastCandle, candle)) {
-        this.setTrend('short', 1);
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by isBearishLongTail ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isHammer(candle)) {
-        this.setTrend('long', 1);
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else if (cs.isInvertedHammer(candle)) {
-        this.setTrend('long', 1);
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
@@ -168,18 +168,18 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isDoji(candle) && cs.isBullish(lastCandle) && cs.isBullish(b) && p > 0.5) { // TODO: update const
-        this.setTrend('short', 1);
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isDoji(candle) && cs.isAllBullish(trendByDuration) && p > 0.25) { // TODO: update const
-        this.setTrend('short', 0);
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL Doji #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isDoji(candle) && cs.isBearish(lastCandle) && cs.isBearish(b) && p > 0.5) { // TODO: update const
-        this.setTrend('long', 1);
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else if (cs.isDoji(candle) && cs.isAllBearish(trendByDuration) && p > 0.25) { // TODO: update const
-        this.setTrend('long', 0);
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
@@ -191,12 +191,12 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
-        this.setTrend('short', 1);
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isGravestone #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isGravestone(candle) && cs.isBearish(lastCandle)) {
-        this.setTrend('long', 1);
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isGravestone #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
