@@ -146,6 +146,23 @@ method.check = function(candle) {
   }
 
   /*
+    Spike up handlers
+   */
+  if (!this.trend.adviced) {
+    if (this.trend.lastAdvice == 'long') {
+      if (cs.isBullish(candle) && this.trend.duration <= 2 && p > 0.4) { // TODO: adjust p
+        this.setTrend('short', 0);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isBearishLongTail ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      }
+    } else if (this.trend.lastAdvice == 'short') {
+      if (cs.isBearish(candle) && this.trend.duration <= 2 && p > 0.4) { // TODO: adjust p
+        this.setTrend('long', 0);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+      }
+    }
+  }
+
+  /*
     Doji & trend
    */
   if (!this.trend.adviced) {
