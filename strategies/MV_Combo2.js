@@ -80,6 +80,8 @@ method.check = function(candle) {
 
   var lastCandle = this.getLastCandle();
   var trendByDuration = this.getTrendCandles();
+  var b = cs.blendCandles(trendByDuration);
+  var p = cs.calculateBodyPercentage(b);
 
   /*
    Signal & Confirm signal
@@ -145,14 +147,14 @@ method.check = function(candle) {
   /*
     Doji & trend
    */
-  if (!this.trend.adviced && this.trend.signal.hold) {
+  if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isDoji(candle) && cs.isBullish(lastCandle)) {
+      if (cs.isDoji(candle) && cs.isBullish(b) && p > 0.5) { // TODO: update p
         this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isDoji(candle) && cs.isBearish(lastCandle)) {
+      if (cs.isDoji(candle) && cs.isBearish(b) && p > 0.5) { // TODO: update p
         this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
@@ -197,9 +199,9 @@ method.check = function(candle) {
     Trend percentage check by duration
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
-    if (trendByDuration.length) {
-      var b = cs.blendCandles(trendByDuration);
-      var p = cs.calculateBodyPercentage(b);
+    //if (trendByDuration.length) {
+      //var b = cs.blendCandles(trendByDuration);
+      //var p = cs.calculateBodyPercentage(b);
 
       log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
@@ -232,7 +234,7 @@ method.check = function(candle) {
           });
         }
       }
-    }
+    //}
   }
 
   /*
