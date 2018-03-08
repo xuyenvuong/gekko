@@ -214,7 +214,7 @@ method.check = function(candle) {
             keep: 2
           }, {
             wait: 1,
-            do: 'long'
+            do: 'hold'
           });
         }
       } else if (cs.isBearish(b)) {
@@ -228,7 +228,7 @@ method.check = function(candle) {
             keep: 2
           }, {
             wait: 1,
-            do: 'short'
+            do: 'hold'
           });
         }
       }
