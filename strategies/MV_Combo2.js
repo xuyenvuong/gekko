@@ -150,12 +150,12 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBullish(candle) && cs.isBearish(lastCandle) && this.trend.duration < 2 && p > 0.4) { // TODO: adjust const
+      if (cs.isBullish(candle) && cs.isBearish(lastCandle) && this.trend.duration <= 2 && p > 0.45) { // TODO: adjust const
         this.setTrend('short', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isBearishLongTail ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearish(candle) && cs.isBullish(lastCandle) && this.trend.duration < 2 && p > 0.4) { // TODO: adjust const
+      if (cs.isBearish(candle) && cs.isBullish(lastCandle) && this.trend.duration <= 2 && p > 0.45) { // TODO: adjust const
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
@@ -202,18 +202,18 @@ method.check = function(candle) {
   if (!this.trend.adviced && !this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle) && cs.isBearish(b)) {
-        this.setTrend('short', 0);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isBullishHarami(lastCandle, candle) && cs.isBullish(b)) {
-        this.setTrend('short', 0);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBullishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isBearishHarami(lastCandle, candle) && cs.isBullish(b)) {
-        this.setTrend('long', 0);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else if (cs.isBullishHarami(lastCandle, candle) && cs.isBearish(b)) {
-        this.setTrend('long', 0);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
