@@ -150,12 +150,12 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBullish(candle) && cs.isBearish(lastCandle) && this.trend.duration <= 2 && cs.calculateBodyPercentage(candle) > 0.42) { // TODO: adjust const
+      if (cs.isBullish(candle) && this.trend.duration <= 2 && cs.calculateBodyPercentage(candle) > 0.42) { // TODO: adjust const
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearish(candle) && cs.isBullish(lastCandle) && this.trend.duration <= 2 && cs.calculateBodyPercentage(candle) > 0.42) { // TODO: adjust const
+      if (cs.isBearish(candle) && this.trend.duration <= 2 && cs.calculateBodyPercentage(candle) > 0.42) { // TODO: adjust const
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
