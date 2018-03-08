@@ -149,12 +149,12 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isDoji(candle) && cs.isBullish(lastCandle) && cs.isBullish(b) && p > 0.5) { // TODO: update p
+      if (cs.isDoji(candle) && cs.isBullish(lastCandle) && cs.isBullish(b) && p > 0.4) { // TODO: update p
         this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isDoji(candle) && cs.isBearish(lastCandle) && cs.isBearish(b) && p > 0.5) { // TODO: update p
+      if (cs.isDoji(candle) && cs.isBearish(lastCandle) && cs.isBearish(b) && p > 0.4) { // TODO: update p
         this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
@@ -208,7 +208,7 @@ method.check = function(candle) {
     log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
     if (cs.isBullish(b)) {
-      if (p >= 0.5) {               // TODO: param or AI about this
+      if (p >= 0.4) {               // TODO: param or AI about this
         this.setTrendSignal({
           on: cs.isBearish,
           do: 'confirm'
@@ -222,7 +222,7 @@ method.check = function(candle) {
         });
       }
     } else if (cs.isBearish(b)) {
-      if (p >= 0.5) {               // TODO: param or AI about this
+      if (p >= 0.4) {               // TODO: param or AI about this
         this.setTrendSignal({
           on: cs.isBullish,
           do: 'confirm'
