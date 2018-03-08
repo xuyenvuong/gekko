@@ -25,13 +25,13 @@ method.init = function() {
     persisted: false,
     adviced: false,
     lastAdvice: this.settings.init.lastAdvice,
-    preservedCandle: false,
+    keep: 0,
     signal: {
       hold: false,
-      until: null,
+      state: 'wait',
+      wait: null,
       confirm: null,
-      persistence: 0,
-      action: null
+      until: null
     }
   }
 
@@ -85,27 +85,34 @@ method.check = function(candle) {
    Signal & Confirm signal
    */
   if (this.trend.signal.hold) {
-    if (!this.trend.signal.until) {
-      if (this.trend.signal.persistence > 0) {
-        if (this.trend.signal.confirm(candle)) {
-          this.setTrend(this.trend.signal.action, false);
+    var stageTransition = false;
 
-          if (this.trend.signal.action == 'long') {
-            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY signal', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-          } else {
-            log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL signal', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-          }
-        }
-
-        this.trend.signal.persistence--;
-      } else if (this.trend.signal.persistence <= 0) {
-        this.resetTrendSignal();
-      }
+    if (this.trend.signal.state == 'wait' && this.trend.wait.on(candle)) {
+      this.trend.signal.state = this.trend.signal.wait.do;
+      log.debug("  <------- Until WAIT is executed");
+      stageTransition = true;
     }
 
-    if (this.trend.signal.until && this.trend.signal.until(candle)) {
-      this.trend.signal.until = null;
-      log.debug("Until is executed");
+    if (!stageTransition && this.trend.signal.state == 'confirm') {
+      this.trend.signal.until.wait--;
+
+      if (this.trend.signal.confirm.on(candle)) {
+        this.setTrend(this.trend.signal.confirm.do, this.trend.signal.confirm.keep);
+
+        if (this.trend.signal.confirm.do == 'long') {
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY signal', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+        } else {
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL signal', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+        }
+      }
+
+      if (this.trend.signal.until.wait == 0) {
+        if (this.trend.signal.until.do != 'hold') {
+          this.setTrend(this.trend.signal.until.do, 0);
+          log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SIGNAL SIGNAL expired', this.trend.signal.until.do, candle.close.toFixed(d));
+        } else
+          this.resetTrendSignal();
+      }
     }
   }
 
@@ -115,37 +122,38 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isHangingMan(lastCandle, candle)) {
-        this.setTrend('short', true);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isHangingMan ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isShootingStar(lastCandle, candle)) {
-        this.setTrend('short', true);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isShootingStar ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isBearishLongTail(lastCandle, candle)) {
-        this.setTrend('short', true);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL by isBearishLongTail ', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isHammer(candle)) {
-        this.setTrend('long', true);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isHammer', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else if (cs.isInvertedHammer(candle)) {
-        this.setTrend('long', true);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isInvertedHammer', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
   }
+
   /*
     Doji & trend
    */
   if (!this.trend.adviced && this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isDoji(candle) && cs.isBullish(lastCandle)) {
-        this.setTrend('short', true);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isDoji(candle) && cs.isBearish(lastCandle)) {
-        this.setTrend('long', true);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
@@ -157,12 +165,12 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
-        this.setTrend('short', true);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isGravestone #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isGravestone(candle) && cs.isBearish(lastCandle)) {
-        this.setTrend('long', true);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isGravestone #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
@@ -174,12 +182,12 @@ method.check = function(candle) {
   if (!this.trend.adviced && !this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle)) {
-        this.setTrend('short', true);
+        this.setTrend('short', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> SELL SELL SELL isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isBearishHarami(lastCandle, candle)) {
-        this.setTrend('long', true);
+        this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
@@ -197,11 +205,31 @@ method.check = function(candle) {
 
       if (cs.isBullish(b)) {
         if (p >= 0.5) {               // TODO: param or AI about this
-          this.setTrendSignal(cs.isBearish, cs.isBearish, 'short', 1);
+          this.setTrendSignal({
+            on: cs.isBearish,
+            do: 'confirm'
+          }, {
+            on: cs.isBearish,
+            do: 'short',
+            keep: 2
+          }, {
+            wait: 1,
+            do: 'long'
+          });
         }
       } else if (cs.isBearish(b)) {
         if (p >= 0.5) {               // TODO: param or AI about this
-          this.setTrendSignal(cs.isBullish, cs.isBullish, 'long', 1);
+          this.setTrendSignal({
+            on: cs.isBullish,
+            do: 'confirm'
+          }, {
+            on: cs.isBullish,
+            do: 'long',
+            keep: 2
+          }, {
+            wait: 1,
+            do: 'short'
+          });
         }
       }
     }
@@ -250,26 +278,26 @@ method.getTrendCandles = function() {
   return this.trend.candles;
 }
 
-method.setTrend = function(lastAdvice, preservedCandle) {
-  this.trend.lastAdvice = lastAdvice;
-  this.trend.preservedCandle = preservedCandle;
+method.setTrend = function(lastAdvice, keep) {
   this.trend.adviced = true;
+  this.trend.lastAdvice = lastAdvice;
+  this.trend.keep = keep;
 
   this.resetTrendSignal();
 }
 
 method.resetTrend = function() {
-  this.trend.duration = this.trend.preservedCandle ? 1 : 0;
+  this.trend.duration = this.trend.keep;
   this.trend.candles.splice(0, this.trend.candles.length - this.trend.duration);
   this.trend.adviced = false;
 }
 
-method.setTrendSignal = function(on, confirm, action, persistence) {
+method.setTrendSignal = function(wait, confirm, until) {
   this.trend.signal.hold = true;
-  this.trend.signal.until = on;
+  this.trend.signal.state = 'wait';
+  this.trend.signal.wait = wait;
   this.trend.signal.confirm = confirm;
-  this.trend.signal.action = action;
-  this.trend.signal.persistence = persistence;
+  this.trend.signal.until = until;
 }
 
 method.resetTrendSignal = function() {
