@@ -87,7 +87,7 @@ method.check = function(candle) {
   if (this.trend.signal.hold) {
     var stageTransition = false;
 
-    if (this.trend.signal.state == 'wait' && this.trend.wait.on(candle)) {
+    if (this.trend.signal.state == 'wait' && this.trend.signal.wait.on(candle)) {
       this.trend.signal.state = this.trend.signal.wait.do;
       log.debug("  <------- Until WAIT is executed");
       stageTransition = true;
