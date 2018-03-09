@@ -207,7 +207,7 @@ method.check = function(candle) {
   /*
    Engulf patterns
    */
-  if (false && !this.trend.adviced && !this.trend.signal.hold) {
+  if (!this.trend.adviced && !this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle) && cs.isBearish(b)) {
         this.setTrend('short', 1);
