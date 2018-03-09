@@ -75,7 +75,7 @@ method.check = function(candle) {
   this.trend.duration++;
 
   if (this.history.candles.length <= this.history.candleMinSize) {
-    log.debug('  ======================== LOADING');
+    log.debug('      ==================== LOADING');
     return
   }
 
@@ -92,7 +92,7 @@ method.check = function(candle) {
 
     if (this.trend.signal.state == 'wait' && this.trend.signal.wait.on(candle)) {
       this.trend.signal.state = this.trend.signal.wait.do;
-      log.debug("  <------- Until WAIT is executed");
+      log.debug("      <--- Until WAIT is executed");
       stageTransition = true;
     }
 
@@ -231,7 +231,7 @@ method.check = function(candle) {
     Trend percentage check by duration
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
-    log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
+    log.debug("       ---- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
     if (cs.isBullish(b)) {
       if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
@@ -310,7 +310,7 @@ method.resetTrend = function() {
 }
 
 method.setTrendSignal = function(wait, confirm, until) {
-  log.debug('  ======== TREND SET ==================');
+  log.debug('      ======== TREND SET ==================');
   this.trend.signal.hold = true;
   this.trend.signal.state = 'wait';
   this.trend.signal.wait = wait;
@@ -319,7 +319,7 @@ method.setTrendSignal = function(wait, confirm, until) {
 }
 
 method.resetTrendSignal = function() {
-  log.debug('  ======== TREND RESET ==================');
+  log.debug('      ======== TREND RESET ==================');
   this.trend.signal.hold = false;
 }
 
