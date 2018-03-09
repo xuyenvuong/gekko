@@ -231,7 +231,7 @@ method.check = function(candle) {
     Trend percentage check by duration
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
-    log.debug("       ---- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
+    log.debug("           ---- b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
 
     if (cs.isBullish(b)) {
       if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
