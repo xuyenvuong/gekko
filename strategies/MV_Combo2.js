@@ -19,12 +19,11 @@ method.init = function() {
   this.name = 'MV_Combo2';
 
   this.trend = {
-    direction: 'none',
     candles: [],
     duration: 0,
-    persisted: false,
     adviced: false,
     lastAdvice: this.settings.init.lastAdvice,
+    lastPercent: 0,
     keep: 0,
     signal: {
       hold: false,
@@ -64,7 +63,8 @@ method.check = function(candle) {
     ' O', candle.open.toFixed(d),
     ' H', candle.high.toFixed(d),
     ' L', candle.low.toFixed(d),
-    ' P', cs.calculateBodyPercentage(candle));
+    ' P', cs.calculateBodyPercentage(candle),
+    ' tp', this.trend.lastPercent);
 
   /*
    Add candle and update support/resistance indexes
@@ -295,10 +295,12 @@ method.getTrendCandles = function() {
   return this.trend.candles;
 }
 
-method.setTrend = function(lastAdvice, keep) {
+method.setTrend = function(advice, keep) {
   this.trend.adviced = true;
-  this.trend.lastAdvice = lastAdvice;
+  this.trend.lastAdvice = advice;
   this.trend.keep = keep;
+
+  this.trend.lastPercent = cs.calculateBodyPercentage(cs.blendCandles(this.getTrendCandles()));
 
   this.resetTrendSignal();
 }
@@ -310,7 +312,7 @@ method.resetTrend = function() {
 }
 
 method.setTrendSignal = function(wait, confirm, until) {
-  log.debug('      ======== TREND SET ==================');
+  log.debug('      ======== SET TREND ==================');
   this.trend.signal.hold = true;
   this.trend.signal.state = 'wait';
   this.trend.signal.wait = wait;
@@ -319,7 +321,7 @@ method.setTrendSignal = function(wait, confirm, until) {
 }
 
 method.resetTrendSignal = function() {
-  log.debug('      ======== TREND RESET ==================');
+  log.debug('      ======== RESET TREND ==================');
   this.trend.signal.hold = false;
 }
 
