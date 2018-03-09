@@ -202,6 +202,24 @@ function isBearishKicker(previous, current) {
     isGapDown(previous, current);
 }
 
+function isAllBullish(dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    if (isBearish(dataArray[i]))
+      return false;
+  }
+
+  return true;
+}
+
+function isAllBearish(dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    if (isBullish(dataArray[i]))
+      return false;
+  }
+
+  return true;
+}
+
 // Pattern detection in arrays.
 // @public
 
@@ -267,24 +285,6 @@ function bullishKicker(dataArray) {
 
 function bearishKicker(dataArray) {
   return findPattern(dataArray, isBearishKicker);
-}
-
-function isAllBullish(dataArray) {
-  for (let i = 0; i < dataArray.length; i++) {
-    if (isBearish(dataArray[i]))
-      return false;
-  }
-
-  return true;
-}
-
-function isAllBearish(dataArray) {
-  for (let i = 0; i < dataArray.length; i++) {
-    if (isBullish(dataArray[i]))
-      return false;
-  }
-
-  return true;
 }
 
 function blendTwoCandles(previous, current) {
