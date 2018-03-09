@@ -234,14 +234,14 @@ method.check = function(candle) {
     log.debug("   -------- b", b, 'duration', this.trend.duration, "length", trendByDuration.length, 'percent growth', p);
 
     if (cs.isBullish(b)) {
-      if (p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (p >= 0.5) {               // TODO: param or AI about this
         this.setTrendSignal({on: cs.isBearish, do: 'confirm'}, {on: cs.isBearish, do: 'short', keep: 2}, {wait: 1, do: 'hold'});
       }
     } else if (cs.isBearish(b)) {
-      if (p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else {
