@@ -190,18 +190,18 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) { // TODO: check const
+      if (cs.isBearishHarami(lastCandle, candle)) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
+      } else if (cs.isBullishHarami(lastCandle, candle)) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
+      if (cs.isBearishHarami(lastCandle, candle)) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
+      } else if (cs.isBullishHarami(lastCandle, candle)) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
