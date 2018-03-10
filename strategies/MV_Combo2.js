@@ -146,25 +146,6 @@ method.check = function(candle) {
   }
 
   /*
-    Spike up handlers
-   */
-  /*
-  if (!this.trend.adviced) {
-    if (this.trend.lastAdvice == 'long') {
-      if (cs.isBullish(candle) && this.trend.duration <= 2 && cs.calculateBodyPercentage(candle) > 0.45) { // TODO: adjust const
-        this.setTrend('short', 0);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      }
-    } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearish(candle) && this.trend.duration <= 2 && cs.calculateBodyPercentage(candle) > 0.45) { // TODO: adjust const
-        this.setTrend('long', 0);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      }
-    }
-  }
-  */
-
-  /*
     Doji & trend
    */
   if (!this.trend.adviced) {
@@ -207,7 +188,20 @@ method.check = function(candle) {
   /*
    Engulf patterns
    */
-  if (!this.trend.adviced && !this.trend.signal.hold) {
+  if (!this.trend.adviced) {
+    if (this.trend.lastAdvice == 'long') {
+      if (cs.isBearishHarami(lastCandle, candle)) {
+        this.setTrend('short', 1);
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      }
+    } else if (this.trend.lastAdvice == 'short') {
+      if (cs.isBullishHarami(lastCandle, candle)) {
+        this.setTrend('long', 1);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+      }
+    }
+  }
+  /*if (!this.trend.adviced && !this.trend.signal.hold) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle) && cs.isBearish(b)) {
         this.setTrend('short', 1);
@@ -225,10 +219,10 @@ method.check = function(candle) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
-  }
+  }*/
 
   /*
-    Trend percentage check by duration
+    Trend percentage check by duration and spike up handlers
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
     log.debug("           ---- b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
