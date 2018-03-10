@@ -190,20 +190,20 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) { // TODO check const
+      if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) { // TODO: check constant
         this.setTrend('short', 0);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isDoji(candle)) {
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      } else if (cs.isBearishHarami(lastCandle, candle)) { //TODO only if lower than short price
         this.setTrend('short', 0);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      } else if (cs.isBearishHarami(lastCandle, candle) && cs.isDoji(candle)) {
+      } else if (cs.isBullishHarami(lastCandle, candle)) { // TODO only if lower than short price
         this.setTrend('long', 0);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
   }
