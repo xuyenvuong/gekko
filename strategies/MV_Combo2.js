@@ -197,6 +197,11 @@ method.check = function(candle) {
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
+
+      if (!cs.isBullishHarami(lastCandle, candle)) {
+        log.debug("NOT isBullishHarami", trendByDuration);
+      }
+
       if (cs.isBullishHarami(lastCandle, candle)) {
         this.setTrend('long', 1);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
