@@ -84,6 +84,8 @@ method.check = function(candle) {
   var b = cs.blendCandles(trendByDuration);
   var p = cs.calculateBodyPercentage(b);
 
+  log.debug("lastCandle", lastCandle);
+
   /*
    Signal & Confirm signal
    */
