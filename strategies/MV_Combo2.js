@@ -191,22 +191,22 @@ method.check = function(candle) {
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBearishHarami(lastCandle, candle)) {
-        this.setTrend('short', 1);
+        this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isBullishHarami(lastCandle, candle)) {
-        this.setTrend('short', 1);
+        this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isBearishHarami(lastCandle, candle)) {
-        this.setTrend('long', 1);
+        this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else if (cs.isBullishHarami(lastCandle, candle)) {
-        this.setTrend('long', 1);
+        this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
 
-      
+
     }
   }
   /*if (!this.trend.adviced && !this.trend.signal.hold) {
@@ -237,14 +237,14 @@ method.check = function(candle) {
 
     if (cs.isBullish(b)) {
       if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
-        this.setTrend('short', 1);
+        this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (p >= 0.5) {               // TODO: param or AI about this
         this.setTrendSignal({on: cs.isBearish, do: 'confirm'}, {on: cs.isBearish, do: 'short', keep: 2}, {wait: 1, do: 'hold'});
       }
     } else if (cs.isBearish(b)) {
       if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
-        this.setTrend('long', 1);
+        this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else {
         if (p >= 0.5) {               // TODO: param or AI about this
