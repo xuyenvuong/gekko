@@ -81,7 +81,7 @@ method.check = function(candle) {
 
   var lastCandle = this.getLastCandle();
   var trendByDuration = this.getTrendCandles();
-  var b = cs.blendCandles(trendByDuration);
+  var b = Object.assign({}, cs.blendCandles(trendByDuration));
   var p = cs.calculateBodyPercentage(b);
 
   /*
@@ -190,48 +190,23 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) { // TODO: check const
+      if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) { // TODO check const
         this.setTrend('short', 0);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isDoji(candle)) {
         this.setTrend('short', 0);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      } else if (cs.isBearishHarami(lastCandle, candle) && cs.isDoji(candle)) {
-        this.setTrend('short', 0);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #3', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
       if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
+      } else if (cs.isBearishHarami(lastCandle, candle) && cs.isDoji(candle)) {
         this.setTrend('long', 0);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isDoji(candle)) {
-        this.setTrend('long', 0);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #3', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
   }
-  /*if (!this.trend.adviced && !this.trend.signal.hold) {
-    if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle) && cs.isBearish(b)) {
-        this.setTrend('short', 1);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isBullish(b)) {
-        this.setTrend('short', 1);
-        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      }
-    } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle) && cs.isBullish(b)) {
-        this.setTrend('long', 1);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isBearish(b)) {
-        this.setTrend('long', 1);
-        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      }
-    }
-  }*/
 
   /*
     Trend percentage check by duration and spike up handlers
