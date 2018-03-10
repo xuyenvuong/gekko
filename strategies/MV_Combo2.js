@@ -190,7 +190,7 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBullishHarami(lastCandle, candle)) {
+      if (cs.isBullishHarami(lastCandle, candle) && cs.calculateBodyPercentage(lastCandle) < 0.4) { // TODO: 0.1 + 0.3
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (cs.isBearishHarami(lastCandle, candle)) { //TODO only if lower than short price
@@ -198,7 +198,7 @@ method.check = function(candle) {
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
+      if (cs.isBearishHarami(lastCandle, candle) && cs.calculateBodyPercentage(lastCandle) < 0.4) { // TODO: 0.1 + 0.3
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else if (cs.isBullishHarami(lastCandle, candle)) { // TODO only if lower than short price
