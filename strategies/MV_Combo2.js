@@ -190,20 +190,26 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
+      if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) { // TODO: check const
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle)) {
+      } else if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      } else if (cs.isBearishHarami(lastCandle, candle) && cs.isDoji(candle)) {
+        this.setTrend('short', 0);
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL isBearishHarami #3', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isBearishHarami(lastCandle, candle)) {
+      if (cs.isBearishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBearishHarami #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
-      } else if (cs.isBullishHarami(lastCandle, candle)) {
+      } else if (cs.isBullishHarami(lastCandle, candle) && cs.calculateEngulfPercent(lastCandle, candle) > 50.0) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+      } else if (cs.isBullishHarami(lastCandle, candle) && cs.isDoji(candle)) {
+        this.setTrend('long', 0);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY isBullishHarami #3', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
   }
@@ -231,7 +237,7 @@ method.check = function(candle) {
     Trend percentage check by duration and spike up handlers
    */
   if (!this.trend.adviced && !this.trend.signal.hold) {
-    log.debug("           ---- b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
+    log.debug("                b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
 
     if (cs.isBullish(b)) {
       if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
