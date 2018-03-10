@@ -314,6 +314,10 @@ function calculateBodyPercentage(candlestick) {
   return 100 * Math.abs(candlestick.close - candlestick.open) / Math.min(candlestick.close, candlestick.open);
 }
 
+function calculateEngulfPercent(previous, current) {
+  return 100 * bodyLen(current) / bodyLen(previous);
+}
+
 module.exports.isDoji = isDoji;
 module.exports.isBullish = isBullish;
 module.exports.isBearish = isBearish;
@@ -355,3 +359,4 @@ module.exports.bearishKicker = bearishKicker;
 module.exports.blendTwoCandles = blendTwoCandles;
 module.exports.blendCandles = blendCandles;
 module.exports.calculateBodyPercentage = calculateBodyPercentage;
+module.exports.calculateEngulfPercent = calculateEngulfPercent;
