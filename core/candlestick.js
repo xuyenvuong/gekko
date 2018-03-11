@@ -68,7 +68,8 @@ function isLongTailLike(candlestick) {
 
 function isEngulfed(shortest, longest) {
   return bodyLen(shortest) < bodyLen(longest) &&
-    !isGap(shortest, longest);
+    Math.min(shortest.open, shortest.close) <= Math.min(longest.open, longest.close) &&
+    Math.max(shortest.open, shortest.close) <= Math.max(longest.open, longest.close)
 }
 
 function isGap(lowest, upmost) {
