@@ -37,6 +37,7 @@ method.init = function() {
   this.history = {
     candles: [],
     age: 0,
+    blendCandle: {},
     candleMinSize: this.settings.init.persistence || 1,
     maxSize: this.settings.init.maxSize || 100
   }
@@ -215,18 +216,18 @@ method.check = function(candle) {
     log.debug("                b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
 
     if (cs.isBullish(b)) {
-      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight()) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (p >= 0.5) {               // TODO: param or AI about this
         this.setTrendSignal({on: cs.isBearish, do: 'confirm'}, {on: cs.isBearish, do: 'short', keep: 2}, {wait: 1, do: 'hold'});
       }
     } else if (cs.isBearish(b)) {
-      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + 0.3) { // TODO: adjust const
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight()) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else {
-        if (p >= 0.5) {               // TODO: param or AI about this
+        if (p >= 0.5) {                   // TODO: param or AI about this
           this.setTrendSignal({on: cs.isBullish, do: 'confirm'}, {on: cs.isBullish, do: 'long', keep: 2}, {wait: 1, do: 'hold'});
         }
       }
@@ -248,6 +249,7 @@ method.check = function(candle) {
  */
 method.addCandle = function(candle) {
   this.history.candles[this.history.age] = candle;
+  this.history.blendCandle = cs.blendTwoCandles(this.history.blendCandle, candle);
 
   if (candle.close < this.supportPrice)
     this.supportIdx = this.history.age;
@@ -263,6 +265,16 @@ method.getLastCandle = function() {
     return null;
 
   return this.history.age > 1 ? this.history.candles[this.history.age - 2] : this.history.candles[this.history.candles.length + (this.history.age - 2)];
+}
+
+method.getBearishWeight = function() {
+  const weight = 0.3; // TODO const adjustment
+  return cs.isBearish(this.history.blendCandle) ? weight + 0.2 : weight;
+}
+
+method.getBullishWeight = function() {
+  const weight = 0.3; // TODO const adjustment
+  return cs.isBullish(this.history.blendCandle) ? weight + 0.2 : weight;
 }
 
 /*
