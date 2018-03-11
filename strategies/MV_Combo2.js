@@ -37,7 +37,6 @@ method.init = function() {
   this.history = {
     candles: [],
     age: 0,
-    blendCandle: {},
     candleMinSize: this.settings.init.persistence || 1,
     maxSize: this.settings.init.maxSize || 100
   }
@@ -216,14 +215,14 @@ method.check = function(candle) {
     log.debug("                b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
 
     if (cs.isBullish(b)) {
-      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight()) {
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight(candle.close)) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (p >= 0.5) {               // TODO: param or AI about this
         this.setTrendSignal({on: cs.isBearish, do: 'confirm'}, {on: cs.isBearish, do: 'short', keep: 2}, {wait: 1, do: 'hold'});
       }
     } else if (cs.isBearish(b)) {
-      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight()) {
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight(candle.close)) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else {
@@ -249,13 +248,16 @@ method.check = function(candle) {
  */
 method.addCandle = function(candle) {
   this.history.candles[this.history.age] = candle;
-  this.history.blendCandle = cs.blendTwoCandles(this.history.blendCandle, candle);
 
-  if (candle.close < this.supportPrice)
+  if (candle.close < this.supportPrice) {
     this.supportIdx = this.history.age;
+    this.supportPrice = candle.close;
+  }
 
-  if (candle.close > this.resistancePrice)
+  if (candle.close > this.resistancePrice) {
     this.resistanceIdx = this.history.age;
+    this.resistancePrice = candle.close;
+  }
 
   this.history.age = (this.history.age + 1) % this.history.maxSize;
 }
@@ -267,14 +269,17 @@ method.getLastCandle = function() {
   return this.history.age > 1 ? this.history.candles[this.history.age - 2] : this.history.candles[this.history.candles.length + (this.history.age - 2)];
 }
 
-method.getBearishWeight = function() {
+method.getBearishWeight = function(price) {
   const weight = 0.3; // TODO const adjustment
-  return cs.isBearish(this.history.blendCandle) ? weight + 0.2 : weight;
+  var midPoint = ((this.resistancePrice - this.supportPrice) / 2) + this.supportPrice;
+
+  return price < midPoint ? weight + 0.2 : weight;
 }
 
-method.getBullishWeight = function() {
+method.getBullishWeight = function(price) {
   const weight = 0.3; // TODO const adjustment
-  return cs.isBullish(this.history.blendCandle) ? weight + 0.2 : weight;
+  var midPoint = ((this.resistancePrice - this.supportPrice) / 2) + this.supportPrice;
+  return price > midPoint ? weight + 0.2 : weight;
 }
 
 /*
