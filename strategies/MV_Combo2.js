@@ -271,15 +271,15 @@ method.getLastCandle = function() {
 
 method.getBearishWeight = function(price) {
   const weight = 0.3; // TODO const adjustment
-  var midPoint = ((this.resistancePrice - this.supportPrice) / 2) + this.supportPrice;
+  var lowPoint = ((this.resistancePrice - this.supportPrice) / 3) + this.supportPrice;
 
-  return price < midPoint ? weight + 0.2 : weight;
+  return price < lowPoint ? weight + 0.1 : weight;
 }
 
 method.getBullishWeight = function(price) {
   const weight = 0.3; // TODO const adjustment
-  var midPoint = ((this.resistancePrice - this.supportPrice) / 2) + this.supportPrice;
-  return price > midPoint ? weight + 0.2 : weight;
+  var highPoint = this.resistancePrice - ((this.resistancePrice - this.supportPrice) / 3);
+  return price > highPoint ? weight + 0.1 : weight;
 }
 
 /*
