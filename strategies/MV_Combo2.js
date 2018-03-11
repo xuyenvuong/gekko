@@ -188,7 +188,7 @@ method.check = function(candle) {
   /*
    Engulf patterns Harami
    */
-  if (!this.trend.adviced) {
+  if (false && !this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBullishHarami(lastCandle, candle) && cs.calculateBodyPercentage(lastCandle) < 0.4) { // TODO: 0.1 + 0.3
         this.setTrend('short', 0);
