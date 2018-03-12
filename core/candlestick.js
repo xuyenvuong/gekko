@@ -12,7 +12,7 @@
     close: Number
  }*/
 
-const MAX_DOJI_BODY_PERCENT = 99.99;
+const MAX_DOJI_BODY_PERCENT = 99.98;
 
 function bodyLen(candlestick) {
   return Math.abs(candlestick.open - candlestick.close);
