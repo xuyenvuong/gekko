@@ -23,6 +23,7 @@ method.init = function() {
     duration: 0,
     adviced: false,
     lastAdvice: this.settings.init.lastAdvice,
+    lastPrice: null,
     lastPercent: 0,
     keep: 0,
     signal: {
@@ -316,10 +317,24 @@ method.getTrendCandles = function() {
   return this.trend.candles;
 }
 
+method.getTrendLastCandles = function() {
+  return this.trend.candles[this.trend.candles.length - 1];
+}
+
 method.setTrend = function(advice, keep) {
+  if (advice == 'long' && this.getTrendLastCandles().close >= this.trend.lastPrice) {
+    log.debug('      ======== IGNORE #1 ==================');
+    return;
+  } else if (advice == 'short' && this.getTrendLastCandles().close <= this.trend.lastPrice) {
+    log.debug('      ======== IGNORE #2 ==================');
+    return;
+  }
+
   this.trend.adviced = true;
   this.trend.lastAdvice = advice;
   this.trend.keep = keep;
+
+  this.trend.lastPrice = this.getTrendLastCandles().close;
 
   this.trend.lastPercent = cs.calculateBodyPercentage(cs.blendCandles(this.getTrendCandles()));
 
