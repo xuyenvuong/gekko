@@ -234,18 +234,18 @@ method.check = function(candle) {
   /*
     Trend percentage check by duration and spike up handlers
    */
-  if (!this.trend.adviced && !this.trend.signal.hold) {
+  if (false && !this.trend.adviced && !this.trend.signal.hold) {
     log.debug("                b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
 
     if (cs.isBullish(b)) {
-      if (false && this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight(candle.close)) {
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight(candle.close)) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (p >= 0.5) {               // TODO: param or AI about this
         this.setTrendSignal({on: cs.isBearish, do: 'confirm'}, {on: cs.isBearish, do: 'short', keep: 2}, {wait: 1, do: 'hold'});
       }
     } else if (cs.isBearish(b)) {
-      if (false && this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight(candle.close)) {
+      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight(candle.close)) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else {
