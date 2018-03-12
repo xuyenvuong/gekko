@@ -122,7 +122,7 @@ method.check = function(candle) {
   /*
     Single candle patterns
    */
-  if (!this.trend.adviced) {
+  if (false && !this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isHangingMan(lastCandle, candle)) {
         this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
@@ -171,7 +171,7 @@ method.check = function(candle) {
   /*
     Multiple candle patterns
    */
-  if (!this.trend.adviced) {
+  if (false && !this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isGravestone(candle) && cs.isBullish(lastCandle)) {
         this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
@@ -188,7 +188,7 @@ method.check = function(candle) {
   /*
    Engulf patterns Harami
    */
-  if (!this.trend.adviced) {
+  if (false && !this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
       if (cs.isBullishHarami(lastCandle, candle) && cs.calculateBodyPercentage(lastCandle) < 0.4) { // TODO: 0.1 + 0.3
         this.setTrend('short', 0);
@@ -238,14 +238,14 @@ method.check = function(candle) {
     log.debug("                b", b, 'd', this.trend.duration, "l", trendByDuration.length, 'pg', p);
 
     if (cs.isBullish(b)) {
-      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight(candle.close)) {
+      if (false && this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBullishWeight(candle.close)) {
         this.setTrend('short', 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL by Spike #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       } else if (p >= 0.5) {               // TODO: param or AI about this
         this.setTrendSignal({on: cs.isBearish, do: 'confirm'}, {on: cs.isBearish, do: 'short', keep: 2}, {wait: 1, do: 'hold'});
       }
     } else if (cs.isBearish(b)) {
-      if (this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight(candle.close)) {
+      if (false && this.trend.duration < 3 && p > (this.trend.duration * 0.1) + this.getBearishWeight(candle.close)) {
         this.setTrend('long', 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Spike #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       } else {
