@@ -322,10 +322,10 @@ method.getTrendLastCandles = function() {
 }
 
 method.setTrend = function(advice, keep) {
-  if (advice == 'long' && this.getTrendLastCandles().close >= this.trend.lastPrice) {
+  if (advice == 'long' && this.getTrendLastCandles().close >= this.trend.lastPrice && this.trend.lastPrice != 0) {
     log.debug('      ======== IGNORE #1 ==================');
     return;
-  } else if (advice == 'short' && this.getTrendLastCandles().close <= this.trend.lastPrice) {
+  } else if (advice == 'short' && this.getTrendLastCandles().close <= this.trend.lastPrice && this.trend.lastPrice != 0) {
     log.debug('      ======== IGNORE #2 ==================');
     return;
   }
