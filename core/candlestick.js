@@ -19,7 +19,7 @@ function bodyLen(candlestick) {
 }
 
 function isDojiBodyLen(candlestick) {
-  return 100 * Math.min(candlestick.open, candlestick.close) / Math.max(candlestick.open, candlestick.close) <= MAX_DOJI_BODY_PERCENT;
+  return 100 * Math.min(candlestick.open, candlestick.close) / Math.max(candlestick.open, candlestick.close) >= MAX_DOJI_BODY_PERCENT;
 }
 
 function wickLen(candlestick) {
