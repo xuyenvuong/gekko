@@ -64,7 +64,7 @@ method.check = function(candle) {
     ' H', candle.high.toFixed(d),
     ' L', candle.low.toFixed(d),
     ' P', cs.calculateBodyPercentage(candle).toFixed(d),
-    ' TP', this.trend.lastPercent).toFixed(d);
+    ' TP', this.trend.lastPercent.toFixed(d));
 
   /*
    Add candle and update support/resistance indexes
