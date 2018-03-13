@@ -152,6 +152,19 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
+      if (cs.isDoji(candle)) {
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
+        log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
+      }
+    } else if (this.trend.lastAdvice == 'short') {
+      if (cs.isDoji(candle)) {
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
+        log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
+      }
+    }
+  }
+  /*if (!this.trend.adviced) {
+    if (this.trend.lastAdvice == 'long') {
       if (cs.isDoji(candle) && cs.isBullish(lastCandle) && cs.isBullish(b) && p > 0.5) { // TODO: update const
         this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
@@ -168,7 +181,7 @@ method.check = function(candle) {
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #2', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
-  }
+  }*/
 
   /*
     Multiple candle patterns
