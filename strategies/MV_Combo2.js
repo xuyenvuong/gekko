@@ -49,6 +49,8 @@ method.init = function() {
   this.pl = 0;
 
   //this.requiredHistory = this.tradingAdvisor.historySize;
+  this.addIndicator('ema', 'EMA', 9);
+
 }
 
 
