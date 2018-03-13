@@ -13,7 +13,7 @@ var method = {};
 // prepare everything our method needs
 method.init = function() {
   this.input = 'candle';
-  this.name = 'MV_Combo';
+  //this.name = 'MV_Combo';
 
   this.trend = {
     direction: 'none',

@@ -15,7 +15,7 @@ var method = {};
 
 // prepare everything our method needs
 method.init = function() {
-  this.name = 'BB_Stoploss';
+  //this.name = 'BB_Stoploss';
   this.nsamples = 0;
   this.trend = {
     zone: 'none',  // none, top, high, low, bottom
