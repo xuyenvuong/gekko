@@ -148,13 +148,13 @@ method.check = function(candle) {
   }
 
   if (cs.isAllBullish(trendByDuration)) {
-    log.debug('  ---------------------------------------BULLISH TREND');
+    log.debug('  ---------------------------------------BULLISH TREND', this.trend.lastAdvice);
   } else if (cs.isAllBearish(trendByDuration)) {
-    log.debug('  ---------------------------------------BEARISH TREND');
+    log.debug('  ---------------------------------------BEARISH TREND', this.trend.lastAdvice);
   }
 
   if (cs.isDoji(candle)) {
-    log.debug('  ---------------------------------------DOJI DOJI');
+    log.debug('  ---------------------------------------DOJI DOJI',this.trend.lastAdvice);
   }
 
   /*
