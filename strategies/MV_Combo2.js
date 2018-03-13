@@ -153,6 +153,10 @@ method.check = function(candle) {
     log.debug('  ---------------------------------------BEARISH TREND');
   }
 
+  if (cs.isDoji(candle)) {
+    log.debug('  ---------------------------------------DOJI DOJI');
+  }
+
   /*
     Doji & trend
    */
