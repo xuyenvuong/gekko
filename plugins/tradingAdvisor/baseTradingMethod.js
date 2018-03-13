@@ -163,7 +163,7 @@ Base.prototype.tick = function(candle) {
         util.die('TALIB ERROR:', err);
 
       // fn is bound to indicator
-      this.result = _.mapValues(result, v => _.last(v));
+      this.result = _.mapValues(result, v => v.slice(-144));
       next(candle);
     }
 
@@ -182,7 +182,7 @@ Base.prototype.tick = function(candle) {
         util.die('TULIP ERROR:', err);
 
       // fn is bound to indicator
-      this.result = _.mapValues(result, v => _.last(v));
+      this.result = _.mapValues(result, v => v.slice(-144));
       next(candle);
     }
 

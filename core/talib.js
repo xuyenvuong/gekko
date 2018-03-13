@@ -48,7 +48,6 @@ var verifyParams = (methodName, params) => {
 
 var methods = {};
 
-
 //////////////////////////////Pattern Recognition//////////////////////////////
 methods.cdl2crows = {
     requires: [],
