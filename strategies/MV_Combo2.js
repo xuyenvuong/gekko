@@ -16,7 +16,7 @@ var method = {};
 // prepare everything our method needs
 method.init = function() {
   this.input = 'candle';
-  this.name = 'MV_Combo2';
+  //this.name = 'MV_Combo2';
 
   this.trend = {
     candles: [],
