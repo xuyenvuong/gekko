@@ -147,6 +147,12 @@ method.check = function(candle) {
     }
   }
 
+  if (cs.isAllBullish(trendByDuration)) {
+    log.debug('  ---------------------------------------BULLISH TREND');
+  } else if (cs.isAllBearish(trendByDuration)) {
+    log.debug('  ---------------------------------------BEARISH TREND');
+  }
+
   /*
     Doji & trend
    */
