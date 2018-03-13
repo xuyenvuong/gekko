@@ -152,13 +152,13 @@ method.check = function(candle) {
    */
   if (!this.trend.adviced) {
     if (this.trend.lastAdvice == 'long') {
-      if (cs.isDoji(candle) && cs.isAllBullish(trendByDuration)) {
-        this.setTrend('short', 0);
+      if (cs.isDoji(candle)) {
+        this.setTrend('short', cs.isBearish(candle) ? 1 : 0);
         log.debug('  <<<<<<<<<<<<<<<<<<<<<<<< SELL SELL SELL Doji #1', candle.close.toFixed(d), 'pl:', this.pl += candle.close);
       }
     } else if (this.trend.lastAdvice == 'short') {
-      if (cs.isDoji(candle) && cs.isAllBearish(trendByDuration)) {
-        this.setTrend('long', 0);
+      if (cs.isDoji(candle)) {
+        this.setTrend('long', cs.isBullish(candle) ? 1 : 0);
         log.debug('  >>>>>>>>>>>>>>>>>>>>>>>> BUY BUY BUY Doji #1', candle.close.toFixed(d), 'pl:', this.pl -= candle.close);
       }
     }
