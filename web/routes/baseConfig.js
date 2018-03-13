@@ -14,9 +14,6 @@ config.debug = true;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 config.tradingAdvisor = {
-  enabled: true,
-  candleSize: 60,
-  historySize: 25
 }
 
 config.candleWriter = {
